@@ -9,6 +9,6 @@ buildNumber.properties
 .mvn/timing.properties
 .mvn/wrapper/maven-wrapper.jar
 .class
-*/.settings/*
+.settings/*
 .classpath
 .project
