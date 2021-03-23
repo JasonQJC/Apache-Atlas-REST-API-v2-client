@@ -5,7 +5,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class MacroRptTemplateCell extends BaseType {
+public class MacroRptTemplateCell extends VBaseType {
 	private String x;
 	private String y;
 	private String bgqType;

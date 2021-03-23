@@ -5,7 +5,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class MicroOriginalTable extends BaseType {
+public class MicroOriginalTable extends VBaseType {
 	private String tableName;
 	private String tableCode;
 	private String tableDescribe;

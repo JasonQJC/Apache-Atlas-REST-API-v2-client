@@ -2,25 +2,20 @@ package com.github.jasonqjc.atlas_v2_client.api;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.github.jasonqjc.atlas_v2_client.ApiClient;
 import com.github.jasonqjc.atlas_v2_client.model.JsonAtlasClassification;
 import com.github.jasonqjc.atlas_v2_client.model.JsonAtlasEntitiesWithExtInfo;
 import com.github.jasonqjc.atlas_v2_client.model.JsonAtlasEntityHeader;
 import com.github.jasonqjc.atlas_v2_client.model.JsonAtlasEntityWithExtInfo;
 import com.github.jasonqjc.atlas_v2_client.model.JsonClassificationAssociateRequest;
 import com.github.jasonqjc.atlas_v2_client.model.JsonEntityMutationResponse;
-
-import feign.Response;
 
 /**
  * API tests for EntityRestApi
@@ -30,24 +25,6 @@ public class EntityRestApiTest {
 
 	@Autowired
     private EntityRestApi api;
-
-    @Before
-    public void setup() {
-    	ApiClient loginClient = new ApiClient();
-    	loginClient.setBasePath("http://192.168.0.176:21000/");
-    	Response response = loginClient.buildClient(UILoginApi.class).login();
-    	Collection<String> collection = response.headers().get("Set-Cookie");
-    	String cookieString = collection.iterator().next();
-    	String string = cookieString.split(";")[0];
-    	
-        ApiClient apiClient = new ApiClient();
-        apiClient.setBasePath("http://192.168.0.176:21000/api/atlas/");
-        apiClient.getFeignBuilder().requestInterceptor(r -> {
-        	r.header("Cookie", string);
-        });
-		api = apiClient
-        		.buildClient(EntityRestApi.class);
-    }
 
     /**
      * Bulk API to associate a tag to multiple entities.

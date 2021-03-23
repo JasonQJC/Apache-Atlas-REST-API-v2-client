@@ -4,6 +4,7 @@ import java.util.Map;
 
 import javax.validation.constraints.NotBlank;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +23,7 @@ import lombok.Data;
 @Validated
 public class ApiController {
 
+	@Autowired
 	private ApiService apiService;
 
 	@PostMapping("/createEntityType")
@@ -39,7 +41,9 @@ public class ApiController {
 		private String guid;
 		@NotBlank
 		private String typeName;
+		//User-defined properties
 		private Map<String, String> customAttributes;
+		//Technical properties
 		private Map<String, Object> attributes;
 		
 	}

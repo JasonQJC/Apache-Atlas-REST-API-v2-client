@@ -8,7 +8,7 @@ import java.util.Map;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -277,9 +277,10 @@ public class TypesRestApiTest {
 //    	map.put("typeName", "LoadProcess");
 ////    	map.put("name", "LoadProcess");
     	
-    	map.put("excludeInternalTypesAndReference", "false");
-    	map.put("type", JsonTypeCategory.RELATIONSHIP.getValue());
-    	map.put("servicetype", "atlas_core");
+    	map.put("excludeInternalTypesAndReference", "true");
+//    	map.put("type", JsonTypeCategory.RELATIONSHIP.getValue());
+//    	map.put("servicetype", "atlas_core");
+    	map.put("supertype", "VBaseType");
     	
         List<JsonAtlasTypeDefHeader> response = api.getTypeDefHeaders(map);
         System.out.println(response);

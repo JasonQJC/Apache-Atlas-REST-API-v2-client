@@ -5,7 +5,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class MacroRptTemplate extends BaseType {
+public class MacroRptTemplate extends VBaseType {
 	private String startTime;
 	private String endTime;
 	private String templateName;

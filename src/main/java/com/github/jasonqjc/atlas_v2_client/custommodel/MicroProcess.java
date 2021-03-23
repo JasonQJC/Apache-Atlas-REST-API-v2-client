@@ -5,7 +5,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class MicroProcess extends BaseType {
+public class MicroProcess extends VBaseType {
 	private String processPath;
 	private String processType;
 }

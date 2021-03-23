@@ -5,7 +5,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class MicroTask extends BaseType {
+public class MicroTask extends VBaseType {
 	private String taskName;
 	private String taskCode;
 	private String taskCycle;

@@ -210,10 +210,14 @@ public interface TypesRestApi extends ApiClient.Api {
    * Bulk retrieval API for all type definitions returned as a list of minimal information header.
    * prams参数
    * @param params
-   * 已知参数
-   * type:JsonTypeCategory 类型的类别 entity,struct等
-   * excludeInternalTypesAndReferences:boolean 排除内部类型
-   * 可能均来自与 JsonAtlasBaseTypeDef
+   * 已知参数 源码 SearchFilter
+   * public static final String PARAM_TYPE            = "type";
+    public static final String PARAM_NAME            = "name";
+    public static final String PARAM_SUPERTYPE       = "supertype";
+    public static final String PARAM_SERVICETYPE     = "servicetype";
+    public static final String PARAM_NOT_SUPERTYPE   = "notsupertype";
+    public static final String PARAM_NOT_SERVICETYPE = "notservicetype";
+    public static final String PARAM_NOT_NAME        = "notname";
    * @return List&lt;JsonAtlasTypeDefHeader&gt;
    */
   @RequestLine("GET /v2/types/typedefs/headers")

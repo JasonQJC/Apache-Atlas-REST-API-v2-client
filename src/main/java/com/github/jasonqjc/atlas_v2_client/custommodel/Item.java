@@ -5,7 +5,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class Item extends BaseType {
+public class Item extends VBaseType {
 	private String itemName;
 	private String type;
 	private String isTopItem;

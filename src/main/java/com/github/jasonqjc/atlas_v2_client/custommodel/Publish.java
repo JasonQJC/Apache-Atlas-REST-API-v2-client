@@ -5,7 +5,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class Publish extends BaseType {
+public class Publish extends VBaseType {
 	private String articleName;
 	private String articleCode;
 	private String bgqType;

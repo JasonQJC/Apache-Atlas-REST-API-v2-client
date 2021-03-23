@@ -5,7 +5,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class MicroPhyTable extends BaseType {
+public class MicroPhyTable extends VBaseType {
 	private String tableName;
 	private String version;
 	private String type;

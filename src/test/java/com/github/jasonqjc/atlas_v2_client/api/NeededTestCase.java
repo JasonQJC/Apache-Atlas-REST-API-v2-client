@@ -2,7 +2,6 @@ package com.github.jasonqjc.atlas_v2_client.api;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -12,14 +11,12 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.jasonqjc.atlas_v2_client.ApiClient;
 import com.github.jasonqjc.atlas_v2_client.api.EntityRestApi.GetByIdQueryParams;
 import com.github.jasonqjc.atlas_v2_client.model.JsonAtlasBaseTypeDef;
 import com.github.jasonqjc.atlas_v2_client.model.JsonAtlasEntitiesWithExtInfo;
@@ -40,8 +37,6 @@ import com.github.jasonqjc.atlas_v2_client.model.JsonRelationshipCategory;
 import com.github.jasonqjc.atlas_v2_client.model.JsonStatus;
 import com.github.jasonqjc.atlas_v2_client.model.JsonStatusAtlasRelationship;
 import com.github.jasonqjc.atlas_v2_client.model.JsonTypeCategory;
-
-import feign.Response;
 
 @SpringBootTest
 public class NeededTestCase {

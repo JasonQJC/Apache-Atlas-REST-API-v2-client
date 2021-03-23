@@ -5,7 +5,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class MacroData extends BaseType {
+public class MacroData extends VBaseType {
 	private String value;
 	private String time;
 }

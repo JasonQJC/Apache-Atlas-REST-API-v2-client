@@ -4,13 +4,10 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.github.jasonqjc.atlas_v2_client.ApiClient;
-import com.github.jasonqjc.atlas_v2_client.api.GlossaryRestApi;
 import com.github.jasonqjc.atlas_v2_client.model.JsonAtlasGlossary;
 import com.github.jasonqjc.atlas_v2_client.model.JsonAtlasGlossaryCategory;
 import com.github.jasonqjc.atlas_v2_client.model.JsonAtlasGlossaryTerm;

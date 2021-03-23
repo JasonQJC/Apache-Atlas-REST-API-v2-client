@@ -5,9 +5,16 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.reflect.FieldUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,12 +22,17 @@ import org.springframework.boot.test.context.SpringBootTest;
 import com.github.jasonqjc.atlas_v2_client.controller.ApiController.EntityUpdateDTO;
 import com.github.jasonqjc.atlas_v2_client.model.JsonAtlasAttributeDef;
 import com.github.jasonqjc.atlas_v2_client.model.JsonAtlasEntityDef;
+import com.github.jasonqjc.atlas_v2_client.model.JsonAtlasObjectId;
+import com.github.jasonqjc.atlas_v2_client.model.JsonAtlasRelationship;
 import com.github.jasonqjc.atlas_v2_client.model.JsonAtlasRelationshipDef;
 import com.github.jasonqjc.atlas_v2_client.model.JsonAtlasRelationshipEndDef;
+import com.github.jasonqjc.atlas_v2_client.model.JsonAtlasStruct;
+import com.github.jasonqjc.atlas_v2_client.model.JsonAtlasTypeDefHeader;
 import com.github.jasonqjc.atlas_v2_client.model.JsonAtlasTypesDef;
 import com.github.jasonqjc.atlas_v2_client.model.JsonCardinality;
 import com.github.jasonqjc.atlas_v2_client.model.JsonPropagateTags;
 import com.github.jasonqjc.atlas_v2_client.model.JsonRelationshipCategory;
+import com.github.jasonqjc.atlas_v2_client.model.JsonStatusAtlasRelationship;
 import com.github.jasonqjc.atlas_v2_client.model.JsonTypeCategory;
 import com.github.jasonqjc.atlas_v2_client.service.ApiService;
 
@@ -35,51 +47,139 @@ public class InitTestCase {
     private RelationshipRestApi relationshipRestApi;
 	@Autowired
     private DiscoveryRestApi discoveryRestApi;
+	@Autowired
+    ApiService apiService;
+	
 
     @Test
-    public void test() {
+    public void test() throws ClassNotFoundException {
 //    	JsonAtlasTypesDef createBaseType = createBaseType();
 //    	System.out.println(createBaseType);
 //    	JsonAtlasTypesDef createSubType = createSubType();
 //    	System.out.println(createSubType);
 //    	JsonAtlasTypesDef createRelationType = createRelationType();
 //    	System.out.println(createRelationType);
-    	
+//    	generateSomeEntity();
+    	generateRelation();
     }
     
-    @Test
-    public void test2() throws ClassNotFoundException {
-    	Class<?> clas = Class.forName("com.github.jasonqjc.atlas_v2_client.custommodel."+"Item");
-    	Field[] declaredFields = clas.getDeclaredFields();
-    	Map<String,Object> map = new HashMap<>();
-    	map.put("aa", "dasdas");
-    	map.put("itemName", "itemName");
-    	map.put("createTime", "createTime");
-    	Map<String,Object> result = new HashMap<>();
-    	for (Field field : declaredFields) {
-			if(map.containsKey(field.getName())) {
-				result.put(field.getName(),map.get(field.getName()));
+    private JsonAtlasTypesDef generateRelation() {
+        Set<String> joinedRelationStrings = getDistinctComparedJoinedStrings();
+        BigDecimal nowUnixTime = BigDecimal.valueOf(new Date().getTime());
+        JsonAtlasTypesDef body = new JsonAtlasTypesDef();
+        joinedRelationStrings.forEach(relationString -> {
+        	String[] split = relationString.split(JOIN_STR);
+        	String relationEnd1 = split[0];
+        	String relationEnd2 = split[0];
+        	JsonAtlasRelationshipDef relationshipDef = new JsonAtlasRelationshipDef();
+        	body.addRelationshipDefsItem(relationshipDef);
+        	relationshipDef.name(JOIN_STR).category(JsonTypeCategory.RELATIONSHIP)
+    		.createTime(nowUnixTime).createdBy("vicson")
+    		.description(JOIN_STR).updateTime(nowUnixTime).updatedBy("vicson");
+    		relationshipDef.relationshipCategory(JsonRelationshipCategory.ASSOCIATION);
+    		relationshipDef.propagateTags(JsonPropagateTags.BOTH);
+    		relationshipDef.endDef1(new JsonAtlasRelationshipEndDef()
+    				.cardinality(JsonCardinality.SET)
+    				.description(relationEnd1)
+    				.isContainer(false)
+    				.isLegacyAttribute(false)
+    				.name("related_"+relationEnd1)
+    				.type(relationEnd1));
+    		relationshipDef.endDef2(new JsonAtlasRelationshipEndDef()
+    				.cardinality(JsonCardinality.SET)
+    				.description(relationEnd2)
+    				.isContainer(false)
+    				.isLegacyAttribute(false)
+    				.name("related_"+relationEnd2)
+    				.type(relationEnd2));
+        });
+		return typeRestApi.createAtlasTypeDefs(body);
+	}
+
+	private Set<String> getDistinctComparedJoinedStrings() {
+		Set<String> set = new HashSet<>();
+		set.add(getComparedJoinedString("MicroOriginalTable","Item"));
+		set.add(getComparedJoinedString("MicroOriginalTable","MicroPhyTable"));
+		set.add(getComparedJoinedString("MicroPhyTable","MicroOriginalTable"));
+		set.add(getComparedJoinedString("MicroBaseTable","Item"));
+		set.add(getComparedJoinedString("MicroBaseTable","MicroColumn"));
+		set.add(getComparedJoinedString("MicroTask","Item"));
+		set.add(getComparedJoinedString("MicroTask","MicroTaskTable"));
+		set.add(getComparedJoinedString("MicroTask","MicroProcess"));
+		set.add(getComparedJoinedString("MicroTaskTable","MicroTask"));
+		set.add(getComparedJoinedString("MicroColumn","MicroPhyTable"));
+		set.add(getComparedJoinedString("MicroColumn","MicroTaskTable"));
+		set.add(getComparedJoinedString("MicroColumn","MicroColumn"));
+		set.add(getComparedJoinedString("Item","Item"));
+		set.add(getComparedJoinedString("Item","MicroTask"));
+		set.add(getComparedJoinedString("Item","MacroRpt"));
+		set.add(getComparedJoinedString("Item","Publish"));
+		set.add(getComparedJoinedString("Item","BiItemTable"));
+		set.add(getComparedJoinedString("Item","Article"));
+		set.add(getComparedJoinedString("Publish","Item"));
+		set.add(getComparedJoinedString("Publish","Publish"));
+		set.add(getComparedJoinedString("PublishObj","Publish"));
+		set.add(getComparedJoinedString("Article","Item"));
+		set.add(getComparedJoinedString("Article","ArticleObj"));
+		set.add(getComparedJoinedString("ArticleObj","Article"));
+		set.add(getComparedJoinedString("MicroPhyTableLog","MicroOriginalTable"));
+		set.add(getComparedJoinedString("MicroPhyTableYTB","MicroOriginalTable"));
+		set.add(getComparedJoinedString("MacroRpt","Item"));
+		set.add(getComparedJoinedString("MacroRpt","MacroRptTemplate"));
+		set.add(getComparedJoinedString("MacroRptTemplate","MacroRpt"));
+		set.add(getComparedJoinedString("MacroRptTemplate","MacroRptTemplateCell"));
+		set.add(getComparedJoinedString("MacroRptTemplate","MacroRptObj"));
+		set.add(getComparedJoinedString("MacroRptTemplateCell","MacroRptTemplate"));
+		set.add(getComparedJoinedString("MacroRptTemplateObj","MacroRptTemplate"));
+		set.add(getComparedJoinedString("MacroRptTemplateObjCell","MacroRptTemplateObj"));
+		set.add(getComparedJoinedString("MacroRptTemplateObjCell","MacroData"));
+		set.add(getComparedJoinedString("MacroData","MacroRptTemplateObjCell"));
+		return set;
+	}
+
+	static final String JOIN_STR = "_";
+	private String getComparedJoinedString(String string, String string2) {
+		if(string.compareTo(string2) <= 0) {
+			return string + JOIN_STR + string2;
+		} else {
+			return string2 + JOIN_STR + string;
+		}
+	}
+
+	private void generateSomeEntity() throws ClassNotFoundException {
+    	Map<String,String> map = new HashMap<>();
+    	map.put("supertype", "VBaseType");
+        List<JsonAtlasTypeDefHeader> response = typeRestApi.getTypeDefHeaders(map);
+        for (JsonAtlasTypeDefHeader typeDefHeader : response) {
+			if(!typeDefHeader.getName().startsWith("VBase")) {
+				EntityUpdateDTO entityUpdateDTO = new EntityUpdateDTO();
+				entityUpdateDTO.setTypeName(typeDefHeader.getName());
+				Field[] allFields = FieldUtils.getAllFields(Class.forName("com.github.jasonqjc.atlas_v2_client.custommodel."+typeDefHeader.getName()));
+				Map<String, Object> attributes = new HashMap<>();
+				entityUpdateDTO.setAttributes(attributes);
+				for (Field field : allFields) {
+					attributes.put(field.getName(), "v_" + field.getName());
+				}
+				String randomAlphabetic = RandomStringUtils.randomAlphabetic(5);
+				for (String needAttr : JsonAtlasStruct.NEEDED_ATTRIBUTES) {
+					if(StringUtils.equalsAny(needAttr, "name","qualifiedName")) {
+						attributes.put(needAttr, typeDefHeader.getName() + "_" + randomAlphabetic);
+					} else {
+						attributes.put(needAttr, "v_" + needAttr);
+					}
+				}
+				apiService.createOrUpdateEntity(entityUpdateDTO);
 			}
 		}
-    	Class<?> superclass = clas.getSuperclass();
-    	if(superclass != null) {
-    		Field[] declaredFields2 = superclass.getDeclaredFields();
-    		for (Field field : declaredFields2) {
-    			if(map.containsKey(field.getName())) {
-    				result.put(field.getName(),map.get(field.getName()));
-    			}
-    		}
-    	}
-    	System.out.println(result);
-    }
+	}
 
-    @Autowired
-    ApiService apiService;
-    
+    /**
+     * 测试添加实体
+     */
     @Test
     public void test3() throws ClassNotFoundException {
     	EntityUpdateDTO entityUpdateDTO = new EntityUpdateDTO();
-    	entityUpdateDTO.setTypeName("MicroPhyTable");
+    	entityUpdateDTO.setTypeName("VBaseTable");
     	Map<String, String> customAttributes = new HashMap<>();
     	customAttributes.put("tableName", "tableName1");
     	customAttributes.put("version", "version1");
@@ -94,10 +194,10 @@ public class InitTestCase {
     	Map<String, Object> attributes = new HashMap<>();
     	attributes.put("userDescription", "userDescription");
     	attributes.put("displayName", "displayName");
-    	attributes.put("name", "MicroPhyTable_002");
+    	attributes.put("name", "VBaseTable_003");
     	attributes.put("description", "description");
     	attributes.put("owner", "owner");
-    	attributes.put("qualifiedName", "MicroPhyTable_002");
+    	attributes.put("qualifiedName", "VBaseTable_003");
     	
     	attributes.put("tableName", "tableName");
     	attributes.put("version", "version");
@@ -112,12 +212,35 @@ public class InitTestCase {
 		
 		apiService.createOrUpdateEntity(entityUpdateDTO);
     }
+    
+    /**
+     * 测试添加关系
+     */
+    @Test
+    public void test4() {
+    	JsonAtlasRelationship body = new JsonAtlasRelationship();
+    	BigDecimal nowUnixTime = BigDecimal.valueOf(new Date().getTime());
+		body.createTime(nowUnixTime);
+        body.updateTime(nowUnixTime);
+        //VBaseTable_002
+        body.end1(new JsonAtlasObjectId().guid("4e895ec0-219e-4b93-9813-6af064ca0697").typeName("VBaseTable"));
+        //VBaseTable_003
+        body.end2(new JsonAtlasObjectId().guid("dba230b5-e7dc-484e-a4a6-58e237b9578c").typeName("VBaseTable"));
+        body.propagateTags(JsonPropagateTags.NONE);
+        body.status(JsonStatusAtlasRelationship.ACTIVE);
+        body.setCreatedBy("vicson");
+        body.setUpdatedBy("vicson");
+        body.typeName("VBaseRelation");
+    	JsonAtlasRelationship response = relationshipRestApi.create(body);
+    	System.out.println(response);
+    }
 
     private JsonAtlasTypesDef createRelationType() {
 		BigDecimal nowUnixTime = BigDecimal.valueOf(new Date().getTime());
 		JsonAtlasTypesDef body = new JsonAtlasTypesDef();
 		
 		JsonAtlasRelationshipDef relationshipDef = new JsonAtlasRelationshipDef();
+		
 		
 		relationshipDef.name("VBaseRelation").category(JsonTypeCategory.RELATIONSHIP)
 		.createTime(nowUnixTime).createdBy("vicson")
@@ -131,18 +254,18 @@ public class InitTestCase {
 				.isContainer(false)
 				.isLegacyAttribute(false)
 				.name("end1")
-				.type("BaseType"));
+				.type("VBaseType"));
 		relationshipDef.endDef2(new JsonAtlasRelationshipEndDef()
 				.cardinality(JsonCardinality.SET)
 				.description("any")
 				.isContainer(false)
 				.isLegacyAttribute(false)
 				.name("end2")
-				.type("BaseType"));
+				.type("VBaseType"));
 		
 		body.addRelationshipDefsItem(relationshipDef);
 		
-		return typeRestApi.createAtlasTypeDefs(body); 
+		return typeRestApi.createAtlasTypeDefs(body);
 	}
     
 
@@ -169,7 +292,7 @@ public class InitTestCase {
 				typeDefBaseType("MicroTaskTable","微观任务表","VBaseType",nowUnixTime,
 						createSimpleAttributeDefs("isInputOrOutput","tableName","tableCode","tabledescribe")));
 		body.addEntityDefsItem(
-				typeDefBaseType("MicroColumn","微观表列","VBaseType",nowUnixTime,
+				typeDefBaseType("MicroColumn","微观表列","VBaseColumn",nowUnixTime,
 						createSimpleAttributeDefs("colCName","colEName","colDataType","sort","colComments")));
 		body.addEntityDefsItem(
 				typeDefBaseType("Item","数据资产主题","VBaseType",nowUnixTime,
@@ -231,10 +354,10 @@ public class InitTestCase {
 
 	private void addBaseEntityDef(BigDecimal nowUnixTime, JsonAtlasTypesDef body) {
 		List<JsonAtlasAttributeDef> attributeDefs = new ArrayList<>();
-		attributeDefs.add(new JsonAtlasAttributeDef().name("createTime").typeName("string").cardinality(JsonCardinality.SINGLE));
-		attributeDefs.add(new JsonAtlasAttributeDef().name("createUser").typeName("string").cardinality(JsonCardinality.SINGLE));
-		attributeDefs.add(new JsonAtlasAttributeDef().name("modifyTime").typeName("string").cardinality(JsonCardinality.SINGLE));
-		attributeDefs.add(new JsonAtlasAttributeDef().name("modifyUser").typeName("string").cardinality(JsonCardinality.SINGLE));
+		attributeDefs.add(new JsonAtlasAttributeDef().name("createTime").isOptional(true).typeName("string").cardinality(JsonCardinality.SINGLE));
+		attributeDefs.add(new JsonAtlasAttributeDef().name("createUser").isOptional(true).typeName("string").cardinality(JsonCardinality.SINGLE));
+		attributeDefs.add(new JsonAtlasAttributeDef().name("modifyTime").isOptional(true).typeName("string").cardinality(JsonCardinality.SINGLE));
+		attributeDefs.add(new JsonAtlasAttributeDef().name("modifyUser").isOptional(true).typeName("string").cardinality(JsonCardinality.SINGLE));
 		body.addEntityDefsItem(typeDefBaseType("VBaseType","基础类型","DataSet",nowUnixTime,attributeDefs));
 		body.addEntityDefsItem(typeDefBaseType("VBaseColumn","基础类型","VBaseType",nowUnixTime));
 		body.addEntityDefsItem(typeDefBaseType("VBaseTable","基础类型","VBaseType",nowUnixTime));
