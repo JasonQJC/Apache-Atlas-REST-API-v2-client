@@ -2,21 +2,15 @@ package com.github.jasonqjc.atlas_v2_client.api;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
-import com.github.jasonqjc.atlas_v2_client.ApiClient;
-import com.github.jasonqjc.atlas_v2_client.api.DiscoveryRestApi;
-import com.github.jasonqjc.atlas_v2_client.api.EntityRestApi;
-import com.github.jasonqjc.atlas_v2_client.api.RelationshipRestApi;
-import com.github.jasonqjc.atlas_v2_client.api.TypesRestApi;
-import com.github.jasonqjc.atlas_v2_client.api.UILoginApi;
 import com.github.jasonqjc.atlas_v2_client.model.JsonAtlasEntity;
 import com.github.jasonqjc.atlas_v2_client.model.JsonAtlasEntityDef;
 import com.github.jasonqjc.atlas_v2_client.model.JsonAtlasEntityHeader;
@@ -33,40 +27,19 @@ import com.github.jasonqjc.atlas_v2_client.model.JsonRelationshipCategory;
 import com.github.jasonqjc.atlas_v2_client.model.JsonStatus;
 import com.github.jasonqjc.atlas_v2_client.model.JsonStatusAtlasRelationship;
 import com.github.jasonqjc.atlas_v2_client.model.JsonTypeCategory;
-import com.sun.org.apache.bcel.internal.generic.NEW;
 
-import feign.Response;
-
+@SpringBootTest
 public class NeededTestCase2 {
 
+	@Autowired
     private TypesRestApi typeRestApi;
+	@Autowired
     private EntityRestApi entityRestApi;
+	@Autowired
     private RelationshipRestApi relationshipRestApi;
+	@Autowired
     private DiscoveryRestApi discoveryRestApi;
 
-    @Before
-    public void setup() {
-    	ApiClient loginClient = new ApiClient();
-    	loginClient.setBasePath("http://192.168.44.132:21000/");
-    	Response response = loginClient.buildClient(UILoginApi.class).login();
-    	Collection<String> collection = response.headers().get("Set-Cookie");
-    	String cookieString = collection.iterator().next();
-    	String string = cookieString.split(";")[0];
-    	
-    	ApiClient apiClient = new ApiClient();
-    	apiClient.getFeignBuilder().requestInterceptor(r -> {
-        	r.header("Cookie", string);
-        });
-        typeRestApi = apiClient
-        		.buildClient(TypesRestApi.class);
-        entityRestApi = apiClient
-        		.buildClient(EntityRestApi.class);
-        relationshipRestApi = apiClient
-        		.buildClient(RelationshipRestApi.class);
-        discoveryRestApi = apiClient
-        		.buildClient(DiscoveryRestApi.class);
-    }
-    
     //类型 使用Table
     //新增数结构枝叶 = 增删改 实体 + 维护关系
     //关系 使用son father

@@ -17,13 +17,76 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+
 /**
- * AtlasRelationshipDef is a TypeDef that defines a relationship. <p> As with other typeDefs the AtlasRelationshipDef has a name. Once created the RelationshipDef has a guid. The name and the guid are the 2 ways that the RelationshipDef is identified. <p> RelationshipDefs have 2 ends, each of which specify cardinality, an EntityDef type name and name and optionally whether the end is a container. <p> RelationshipDefs can have AttributeDefs - though only primitive types are allowed. <br> RelationshipDefs have a relationshipCategory specifying the UML type of relationship required <br> RelationshipDefs also have a PropogateTag - indicating which way tags could flow over the relationships. <p> The way EntityDefs and RelationshipDefs are intended to be used is that EntityDefs will define AttributeDefs these AttributeDefs will not specify an EntityDef type name as their types. <p> RelationshipDefs introduce new attributes to the entity instances. For example <p> EntityDef A might have attributes attr1,attr2,attr3 <br> EntityDef B might have attributes attr4,attr5,attr6 <br> RelationshipDef AtoB might define 2 ends <br>  <pre>    end1:  type A, name attr7    end2:  type B, name attr8  </pre>  <p> When an instance of EntityDef A is created, it will have attributes attr1,attr2,attr3,attr7 <br> When an instance of EntityDef B is created, it will have attributes attr4,attr5,attr6,attr8 <p> In this way relationshipDefs can be authored separately from entityDefs and can inject relationship attributes into the entity instances
- * <br/><br/>
- * AtlasRelationshipDef是定义关系的TypeDef。 <p>与其他typeDef一样，AtlasRelationshipDef也有一个名称。创建后，RelationshipDef具有一个GUID。名称和GUID是识别RelationshipDef的2种方法。 <p> RelationshipDefs有2个端点，每个端点指定基数，一个EntityDef类型名称和名称，以及该端点是否为容器（可选）。 <p> RelationshipDefs可以具有AttributeDefs-尽管仅允许原始类型。 <br> RelationshipDefs具有一个RelationshipCategory，用于指定所需的UML关系类型。<br> RelationshipDefs还具有PropogateTag-指示标签可以在关系上流动的方式。 <p>打算使用EntityDefs和RelationshipDefs的方式是EntityDefs将定义AttributeDefs，这些AttributeDefs将不指定EntityDef类型名称作为其类型。 <p> RelationshipDefs向实体实例引入了新的属性。例如，<p> EntityDef A可能具有属性attr1，attr2，attr3 <br> <br> EntityDef B可能具有属性attr4，attr5，attr6 <br> RelationshipDef AtoB可能定义了2个端点<br> <pre> end1：类型A，名称为attr7 end2：类型B，名称为attr8 </ pre> <p>创建EntityDef A的实例时，它将具有属性attr1，attr2，attr3，attr7 <br>创建EntityDef B的实例时，它将具有属性attr4，attr5，attr6，attr8 <p>通过这种方式，可以与EntityDefs分开编写relationshipDef，并将关系属性注入到实体实例
+ * AtlasRelationshipDef is a TypeDef that defines a relationship.
+ * <p>
+ * As with other typeDefs the AtlasRelationshipDef has a name. Once created the
+ * RelationshipDef has a guid. The name and the guid are the 2 ways that the
+ * RelationshipDef is identified.
+ * <p>
+ * RelationshipDefs have 2 ends, each of which specify cardinality, an EntityDef
+ * type name and name and optionally whether the end is a container.
+ * <p>
+ * RelationshipDefs can have AttributeDefs - though only primitive types are
+ * allowed. <br>
+ * RelationshipDefs have a relationshipCategory specifying the UML type of
+ * relationship required <br>
+ * RelationshipDefs also have a PropogateTag - indicating which way tags could
+ * flow over the relationships.
+ * <p>
+ * The way EntityDefs and RelationshipDefs are intended to be used is that
+ * EntityDefs will define AttributeDefs these AttributeDefs will not specify an
+ * EntityDef type name as their types.
+ * <p>
+ * RelationshipDefs introduce new attributes to the entity instances. For
+ * example
+ * <p>
+ * EntityDef A might have attributes attr1,attr2,attr3 <br>
+ * EntityDef B might have attributes attr4,attr5,attr6 <br>
+ * RelationshipDef AtoB might define 2 ends <br>
+ * 
+ * <pre>
+ *     end1:  type A, name attr7    end2:  type B, name attr8
+ * </pre>
+ * <p>
+ * When an instance of EntityDef A is created, it will have attributes
+ * attr1,attr2,attr3,attr7 <br>
+ * When an instance of EntityDef B is created, it will have attributes
+ * attr4,attr5,attr6,attr8
+ * <p>
+ * In this way relationshipDefs can be authored separately from entityDefs and
+ * can inject relationship attributes into the entity instances <br/>
+ * <br/>
+ * 
+ * AtlasRelationshipDef是定义关系的TypeDef。
+ * <p>
+ * 与其他typeDef一样，AtlasRelationshipDef也有一个名称。创建后，RelationshipDef具有一个GUID。名称和GUID是识别RelationshipDef的2种方法。
+ * <p>
+ * RelationshipDefs有2个端点，每个端点指定基数，一个EntityDef类型名称和名称，以及该端点是否为容器（可选）。
+ * <p>
+ * RelationshipDefs可以具有AttributeDefs-尽管仅允许原始类型。 <br>
+ * RelationshipDefs具有一个RelationshipCategory，用于指定所需的UML关系类型。<br>
+ * RelationshipDefs还具有PropogateTag-指示标签可以在关系上流动的方式。
+ * <p>
+ * 打算使用EntityDefs和RelationshipDefs的方式是EntityDefs将定义AttributeDefs，这些AttributeDefs将不指定EntityDef类型名称作为其类型。
+ * <p>
+ * RelationshipDefs向实体实例引入了新的属性。例如，
+ * <p>
+ * EntityDef A可能具有属性attr1，attr2，attr3 <br>
+ * <br>
+ * EntityDef B可能具有属性attr4，attr5，attr6 <br>
+ * RelationshipDef AtoB可能定义了2个端点<br>
+ * 
+ * <pre>
+ * end1：类型A，名称为attr7 end2：类型B，名称为attr8 </ pre>
+ * <p>
+ * 创建EntityDef A的实例时，它将具有属性attr1，attr2，attr3，attr7 <br>
+ * 创建EntityDef B的实例时，它将具有属性attr4，attr5，attr6，attr8
+ * <p>
+ * 通过这种方式，可以与EntityDefs分开编写relationshipDef，并将关系属性注入到实体实例
  */
 @Schema(description = "AtlasRelationshipDef is a TypeDef that defines a relationship. <p> As with other typeDefs the AtlasRelationshipDef has a name. Once created the RelationshipDef has a guid. The name and the guid are the 2 ways that the RelationshipDef is identified. <p> RelationshipDefs have 2 ends, each of which specify cardinality, an EntityDef type name and name and optionally whether the end is a container. <p> RelationshipDefs can have AttributeDefs - though only primitive types are allowed. <br> RelationshipDefs have a relationshipCategory specifying the UML type of relationship required <br> RelationshipDefs also have a PropogateTag - indicating which way tags could flow over the relationships. <p> The way EntityDefs and RelationshipDefs are intended to be used is that EntityDefs will define AttributeDefs these AttributeDefs will not specify an EntityDef type name as their types. <p> RelationshipDefs introduce new attributes to the entity instances. For example <p> EntityDef A might have attributes attr1,attr2,attr3 <br> EntityDef B might have attributes attr4,attr5,attr6 <br> RelationshipDef AtoB might define 2 ends <br>  <pre>    end1:  type A, name attr7    end2:  type B, name attr8  </pre>  <p> When an instance of EntityDef A is created, it will have attributes attr1,attr2,attr3,attr7 <br> When an instance of EntityDef B is created, it will have attributes attr4,attr5,attr6,attr8 <p> In this way relationshipDefs can be authored separately from entityDefs and can inject relationship attributes into the entity instances")
-
 public class JsonAtlasRelationshipDef extends JsonAtlasStructDef {
   @JsonProperty("endDef1")
   private JsonAtlasRelationshipEndDef endDef1 = null;

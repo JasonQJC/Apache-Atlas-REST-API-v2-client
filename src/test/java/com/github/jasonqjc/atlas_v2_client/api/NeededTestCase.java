@@ -14,15 +14,12 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.jasonqjc.atlas_v2_client.ApiClient;
-import com.github.jasonqjc.atlas_v2_client.api.DiscoveryRestApi;
-import com.github.jasonqjc.atlas_v2_client.api.EntityRestApi;
-import com.github.jasonqjc.atlas_v2_client.api.RelationshipRestApi;
-import com.github.jasonqjc.atlas_v2_client.api.TypesRestApi;
-import com.github.jasonqjc.atlas_v2_client.api.UILoginApi;
 import com.github.jasonqjc.atlas_v2_client.api.EntityRestApi.GetByIdQueryParams;
 import com.github.jasonqjc.atlas_v2_client.model.JsonAtlasBaseTypeDef;
 import com.github.jasonqjc.atlas_v2_client.model.JsonAtlasEntitiesWithExtInfo;
@@ -46,36 +43,18 @@ import com.github.jasonqjc.atlas_v2_client.model.JsonTypeCategory;
 
 import feign.Response;
 
+@SpringBootTest
 public class NeededTestCase {
 
+	@Autowired
     private TypesRestApi typeRestApi;
+	@Autowired
     private EntityRestApi entityRestApi;
+	@Autowired
     private RelationshipRestApi relationshipRestApi;
+	@Autowired
     private DiscoveryRestApi discoveryRestApi;
 
-    @Before
-    public void setup() {
-    	ApiClient loginClient = new ApiClient();
-    	loginClient.setBasePath("http://192.168.44.132:21000/");
-    	Response response = loginClient.buildClient(UILoginApi.class).login();
-    	Collection<String> collection = response.headers().get("Set-Cookie");
-    	String cookieString = collection.iterator().next();
-    	String string = cookieString.split(";")[0];
-    	
-    	ApiClient apiClient = new ApiClient();
-    	apiClient.getFeignBuilder().requestInterceptor(r -> {
-        	r.header("Cookie", string);
-        });
-        typeRestApi = apiClient
-        		.buildClient(TypesRestApi.class);
-        entityRestApi = apiClient
-        		.buildClient(EntityRestApi.class);
-        relationshipRestApi = apiClient
-        		.buildClient(RelationshipRestApi.class);
-        discoveryRestApi = apiClient
-        		.buildClient(DiscoveryRestApi.class);
-    }
-    
     /**
      * 
      * 创建新类型 pass
@@ -284,7 +263,7 @@ public class NeededTestCase {
 		jsonAtlasEntity.attributes(attributes);
 		entities.add(jsonAtlasEntity);
 		body.entities(entities);
-        JsonEntityMutationResponse response = entityRestApi.createOrUpdate_3(body);
+        JsonEntityMutationResponse response = entityRestApi.createOrUpdateBulk(body);
 
         System.out.println(response);
     }

@@ -28,7 +28,6 @@ public interface EntityRestApi extends ApiClient.Api {
 
   /**
    * Bulk API to associate a tag to multiple entities.
-   * Bulk API to associate a tag to multiple entities
    * @param body  (optional)
    */
   @RequestLine("POST /v2/entity/bulk/classification")
@@ -38,7 +37,6 @@ public interface EntityRestApi extends ApiClient.Api {
   })
   void addClassification(JsonClassificationAssociateRequest body);
   /**
-   * Adds classifications to an existing entity represented by a guid.
    * Adds classifications to an existing entity represented by a guid.
    * @param guid globally unique identifier for the entity (required)
    * @param body  (optional)
@@ -51,7 +49,6 @@ public interface EntityRestApi extends ApiClient.Api {
   void addClassifications(@Param("guid") String guid, List<JsonAtlasClassification> body);
   /**
    * Adds classification to the entity identified by its type and unique attributes.
-   * Adds classification to the entity identified by its type and unique attributes.
    * @param typeName  (required)
    * @param body  (optional)
    */
@@ -63,7 +60,6 @@ public interface EntityRestApi extends ApiClient.Api {
   void addClassificationsByUniqueAttribute(@Param("typeName") String typeName, List<JsonAtlasClassification> body, @QueryMap Map<String,String> attributes);
   /**
    * add given labels to a given entity.
-   * add given labels to a given entity
    * @param guid - Unique entity identifier (required)
    */
   @RequestLine("PUT /v2/entity/guid/{guid}/labels")
@@ -142,8 +138,10 @@ public interface EntityRestApi extends ApiClient.Api {
   })
   void addOrUpdateBusinessAttributes_2(@Param("bmName") String bmName, @Param("guid") String guid);
   /**
-   * Create new entity or update existing entity in Atlas.
-   * Create new entity or update existing entity in Atlas. Existing entity is matched using its unique guid if supplied or by its unique attributes eg: qualifiedName
+   * Create new entity or update existing entity in Atlas. 
+   * Existing entity is matched using its unique guid if supplied or by its unique attributes eg: qualifiedName
+   * 创建或更新一个已存在于Atlas中的实体
+   * 已存在的实体通过可能传入了的唯一的guid或者唯一的属性,如qualifiedName来匹配
    * @param body  (optional)
    * @return JsonEntityMutationResponse
    */
@@ -154,8 +152,8 @@ public interface EntityRestApi extends ApiClient.Api {
   })
   JsonEntityMutationResponse createOrUpdate(JsonAtlasEntityWithExtInfo body);
   /**
-   * Bulk API to create new entities or updates existing entities in Atlas.
-   * Bulk API to create new entities or updates existing entities in Atlas. Existing entity is matched using its unique guid if supplied or by its unique attributes eg: qualifiedName
+   * Bulk API to create new entities or updates existing entities in Atlas. 
+   * Existing entity is matched using its unique guid if supplied or by its unique attributes eg: qualifiedName
    * @param body  (optional)
    * @return JsonEntityMutationResponse
    */
@@ -164,9 +162,8 @@ public interface EntityRestApi extends ApiClient.Api {
       "Content-Type: application/json;charset=UTF-8",
       "Accept: application/json",
   })
-  JsonEntityMutationResponse createOrUpdate_3(JsonAtlasEntitiesWithExtInfo body);
+  JsonEntityMutationResponse createOrUpdateBulk(JsonAtlasEntitiesWithExtInfo body);
   /**
-   * Delete an entity identified by its GUID.
    * Delete an entity identified by its GUID.
    * @param guid GUID for the entity (required)
    * @return JsonEntityMutationResponse
@@ -179,7 +176,6 @@ public interface EntityRestApi extends ApiClient.Api {
   JsonEntityMutationResponse deleteByGuid(@Param("guid") String guid);
   /**
    * Bulk API to delete list of entities identified by its GUIDs.
-   * Bulk API to delete list of entities identified by its GUIDs
    * @param guid  (optional)
    * @return JsonEntityMutationResponse
    */
@@ -192,7 +188,6 @@ public interface EntityRestApi extends ApiClient.Api {
 
   /**
    * Bulk API to delete list of entities identified by its GUIDs.
-   * Bulk API to delete list of entities identified by its GUIDs
    * Note, this is equivalent to the other <code>deleteByGuids</code> method,
    * but with the query parameters collected into a single Map parameter. This
    * is convenient for services with optional query parameters, especially when
@@ -224,8 +219,8 @@ public interface EntityRestApi extends ApiClient.Api {
     }
   }
   /**
-   * Delete an entity identified by its type and unique attributes.
-   * Delete an entity identified by its type and unique attributes.  In addition to the typeName path parameter, attribute key-value pair(s) can be provided in the following format  attr:&lt;attrName&gt;&#x3D;&lt;attrValue&gt;  NOTE: The attrName and attrValue should be unique across entities, eg. qualifiedName  The REST request would look something like this  DELETE /v2/entity/uniqueAttribute/type/aType?attr:aTypeAttribute&#x3D;someValue
+   * Delete an entity identified by its type and unique attributes.  
+   * In addition to the typeName path parameter, attribute key-value pair(s) can be provided in the following format  attr:&lt;attrName&gt;&#x3D;&lt;attrValue&gt;  NOTE: The attrName and attrValue should be unique across entities, eg. qualifiedName  The REST request would look something like this  DELETE /v2/entity/uniqueAttribute/type/aType?attr:aTypeAttribute&#x3D;someValue
    * @param typeName - entity type to be deleted (required)
    * @return JsonEntityMutationResponse
    */
@@ -236,7 +231,6 @@ public interface EntityRestApi extends ApiClient.Api {
   })
   JsonEntityMutationResponse deleteByUniqueAttribute(@Param("typeName") String typeName,@QueryMap Map<String, String> uniqueAttributes);
   /**
-   * Deletes a given classification from an existing entity represented by a guid.
    * Deletes a given classification from an existing entity represented by a guid.
    * @param classificationName name of the classifcation (required)
    * @param guid globally unique identifier for the entity (required)
@@ -250,7 +244,6 @@ public interface EntityRestApi extends ApiClient.Api {
   void deleteClassification(@Param("classificationName") String classificationName, @Param("guid") String guid, @Param("associatedEntityGuid") String associatedEntityGuid);
 
   /**
-   * Deletes a given classification from an existing entity represented by a guid.
    * Deletes a given classification from an existing entity represented by a guid.
    * Note, this is equivalent to the other <code>deleteClassification</code> method,
    * but with the query parameters collected into a single Map parameter. This
@@ -283,7 +276,6 @@ public interface EntityRestApi extends ApiClient.Api {
     }
   }
   /**
-   * Deletes a given classification from an entity identified by its type and unique attributes.
    * Deletes a given classification from an entity identified by its type and unique attributes.
    * @param classificationName name of the classification (required)
    * @param typeName  (required)

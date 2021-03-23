@@ -13,8 +13,10 @@
 package com.github.jasonqjc.atlas_v2_client.model;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -25,6 +27,25 @@ import io.swagger.v3.oas.annotations.media.Schema;
 @Schema(description = "Captures details of struct contents. Not instantiated directly, used only via AtlasEntity, AtlasClassification.")
 
 public class JsonAtlasStruct {
+	
+  public static final Set<String> NEEDED_ATTRIBUTES = new HashSet<>();
+  static {
+	  NEEDED_ATTRIBUTES.add("userDescription");
+	  NEEDED_ATTRIBUTES.add("displayName");
+	  NEEDED_ATTRIBUTES.add("name");
+	  NEEDED_ATTRIBUTES.add("description");
+	  NEEDED_ATTRIBUTES.add("owner");
+	  NEEDED_ATTRIBUTES.add("qualifiedName");
+  }
+  /**
+   * userDescription
+   * displayName
+   * name
+   * description
+   * owner
+   * qualifiedName
+   * 加上该类型定义的属性
+   */
   @JsonProperty("attributes")
   private Map<String, Object> attributes = null;
 

@@ -1,40 +1,19 @@
 package com.github.jasonqjc.atlas_v2_client.api;
 
-import java.util.Collection;
-
-import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
-import com.github.jasonqjc.atlas_v2_client.ApiClient;
-import com.github.jasonqjc.atlas_v2_client.api.LineageRestApi;
-import com.github.jasonqjc.atlas_v2_client.api.UILoginApi;
 import com.github.jasonqjc.atlas_v2_client.model.JsonAtlasLineageInfo;
-
-import feign.Response;
 
 /**
  * API tests for LineageRestApi
  */
+@SpringBootTest
 public class LineageRestApiTest {
 
+	@Autowired
     private LineageRestApi api;
-
-    @Before
-    public void setup() {
-    	ApiClient loginClient = new ApiClient();
-    	loginClient.setBasePath("http://192.168.44.132:21000/");
-    	Response response = loginClient.buildClient(UILoginApi.class).login();
-    	Collection<String> collection = response.headers().get("Set-Cookie");
-    	String cookieString = collection.iterator().next();
-    	String string = cookieString.split(";")[0];
-    	
-        ApiClient apiClient = new ApiClient();
-        apiClient.getFeignBuilder().requestInterceptor(r -> {
-        	r.header("Cookie", string);
-        });
-		api = apiClient
-        		.buildClient(LineageRestApi.class);
-    }
 
     /**
      * Returns lineage info about entity.
@@ -52,9 +31,9 @@ public class LineageRestApiTest {
     }
 
     /**
-     * Returns lineage info about entity.
      *
-     * Returns lineage info about entity.  In addition to the typeName path parameter, attribute key-value pair(s) can be provided in the following format  attr:&lt;attrName&gt;&#x3D;&lt;attrValue&gt;  NOTE: The attrName and attrValue should be unique across entities, eg. qualifiedName
+     * Returns lineage info about entity.  
+     * In addition to the typeName path parameter, attribute key-value pair(s) can be provided in the following format  attr:&lt;attrName&gt;&#x3D;&lt;attrValue&gt;  NOTE: The attrName and attrValue should be unique across entities, eg. qualifiedName
      *
      * This tests the overload of the method that uses a Map for query parameters instead of
      * listing them out individually.
@@ -71,7 +50,6 @@ public class LineageRestApiTest {
     /**
      * Returns lineage info about entity.
      *
-     * Returns lineage info about entity.
      */
     @Test
     public void getLineageGraphTest() {
@@ -83,8 +61,6 @@ public class LineageRestApiTest {
     }
 
     /**
-     * Returns lineage info about entity.
-     *
      * Returns lineage info about entity.
      *
      * This tests the overload of the method that uses a Map for query parameters instead of

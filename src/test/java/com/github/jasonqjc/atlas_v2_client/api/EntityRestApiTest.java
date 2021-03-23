@@ -1,6 +1,7 @@
 package com.github.jasonqjc.atlas_v2_client.api;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -8,10 +9,10 @@ import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import com.github.jasonqjc.atlas_v2_client.ApiClient;
-import com.github.jasonqjc.atlas_v2_client.api.EntityRestApi;
-import com.github.jasonqjc.atlas_v2_client.api.UILoginApi;
 import com.github.jasonqjc.atlas_v2_client.model.JsonAtlasClassification;
 import com.github.jasonqjc.atlas_v2_client.model.JsonAtlasEntitiesWithExtInfo;
 import com.github.jasonqjc.atlas_v2_client.model.JsonAtlasEntityHeader;
@@ -24,20 +25,23 @@ import feign.Response;
 /**
  * API tests for EntityRestApi
  */
+@SpringBootTest
 public class EntityRestApiTest {
 
+	@Autowired
     private EntityRestApi api;
 
     @Before
     public void setup() {
     	ApiClient loginClient = new ApiClient();
-    	loginClient.setBasePath("http://192.168.44.132:21000/");
+    	loginClient.setBasePath("http://192.168.0.176:21000/");
     	Response response = loginClient.buildClient(UILoginApi.class).login();
     	Collection<String> collection = response.headers().get("Set-Cookie");
     	String cookieString = collection.iterator().next();
     	String string = cookieString.split(";")[0];
     	
         ApiClient apiClient = new ApiClient();
+        apiClient.setBasePath("http://192.168.0.176:21000/api/atlas/");
         apiClient.getFeignBuilder().requestInterceptor(r -> {
         	r.header("Cookie", string);
         });
@@ -48,7 +52,6 @@ public class EntityRestApiTest {
     /**
      * Bulk API to associate a tag to multiple entities.
      *
-     * Bulk API to associate a tag to multiple entities
      */
     @Test
     public void addClassificationTest() {
@@ -61,7 +64,6 @@ public class EntityRestApiTest {
     /**
      * Adds classifications to an existing entity represented by a guid.
      *
-     * Adds classifications to an existing entity represented by a guid.
      */
     @Test
     public void addClassificationsTest() {
@@ -75,7 +77,6 @@ public class EntityRestApiTest {
     /**
      * Adds classification to the entity identified by its type and unique attributes.
      *
-     * Adds classification to the entity identified by its type and unique attributes.
      */
     @Test
     public void addClassificationsByUniqueAttributeTest() {
@@ -89,7 +90,6 @@ public class EntityRestApiTest {
     /**
      * add given labels to a given entity.
      *
-     * add given labels to a given entity
      */
     @Test
     public void addLabelsTest() {
@@ -99,11 +99,6 @@ public class EntityRestApiTest {
         // TODO: test validations
     }
 
-    /**
-     * 
-     *
-     * 
-     */
     @Test
     public void addLabels_0Test() {
         String typeName = null;
@@ -112,12 +107,7 @@ public class EntityRestApiTest {
 
         // TODO: test validations
     }
-
-    /**
-     * 
-     *
-     * 
-     */
+    
     @Test
     public void addOrUpdateBusinessAttributesTest() {
         String guid = null;
@@ -128,10 +118,6 @@ public class EntityRestApiTest {
     }
 
     /**
-     * 
-     *
-     * 
-     *
      * This tests the overload of the method that uses a Map for query parameters instead of
      * listing them out individually.
      */
@@ -144,11 +130,7 @@ public class EntityRestApiTest {
 
     // TODO: test validations
     }
-    /**
-     * 
-     *
-     * 
-     */
+    
     @Test
     public void addOrUpdateBusinessAttributes_0Test() {
         String bmName = null;
@@ -159,9 +141,8 @@ public class EntityRestApiTest {
     }
 
     /**
-     * Create new entity or update existing entity in Atlas.
-     *
-     * Create new entity or update existing entity in Atlas. Existing entity is matched using its unique guid if supplied or by its unique attributes eg: qualifiedName
+     * Create new entity or update existing entity in Atlas. 
+     * Existing entity is matched using its unique guid if supplied or by its unique attributes eg: qualifiedName
      */
     @Test
     public void createOrUpdateTest() {
@@ -172,21 +153,18 @@ public class EntityRestApiTest {
     }
 
     /**
-     * Bulk API to create new entities or updates existing entities in Atlas.
-     *
-     * Bulk API to create new entities or updates existing entities in Atlas. Existing entity is matched using its unique guid if supplied or by its unique attributes eg: qualifiedName
+     * Bulk API to create new entities or updates existing entities in Atlas. 
+     * Existing entity is matched using its unique guid if supplied or by its unique attributes eg: qualifiedName
      */
     @Test
     public void createOrUpdate_0Test() {
         JsonAtlasEntitiesWithExtInfo body = null;
-        // JsonEntityMutationResponse response = api.createOrUpdate_0(body);
+         JsonEntityMutationResponse response = api.createOrUpdateBulk(body);
 
         // TODO: test validations
     }
 
     /**
-     * Delete an entity identified by its GUID.
-     *
      * Delete an entity identified by its GUID.
      */
     @Test
@@ -201,20 +179,17 @@ public class EntityRestApiTest {
     /**
      * Bulk API to delete list of entities identified by its GUIDs.
      *
-     * Bulk API to delete list of entities identified by its GUIDs
      */
     @Test
     public void deleteByGuidsTest() {
-        List<String> guid = null;
-        // JsonEntityMutationResponse response = api.deleteByGuids(guid);
-
-        // TODO: test validations
+        List<String> guid = new ArrayList<String>();
+        guid.add("13c89a6e-f2cb-4033-a9b7-832a39658d96");
+        JsonEntityMutationResponse response = api.deleteByGuids(guid);
+        System.out.println(response);
     }
 
     /**
      * Bulk API to delete list of entities identified by its GUIDs.
-     *
-     * Bulk API to delete list of entities identified by its GUIDs
      *
      * This tests the overload of the method that uses a Map for query parameters instead of
      * listing them out individually.
@@ -228,9 +203,8 @@ public class EntityRestApiTest {
     // TODO: test validations
     }
     /**
-     * Delete an entity identified by its type and unique attributes.
-     *
-     * Delete an entity identified by its type and unique attributes.  In addition to the typeName path parameter, attribute key-value pair(s) can be provided in the following format  attr:&lt;attrName&gt;&#x3D;&lt;attrValue&gt;  NOTE: The attrName and attrValue should be unique across entities, eg. qualifiedName  The REST request would look something like this  DELETE /v2/entity/uniqueAttribute/type/aType?attr:aTypeAttribute&#x3D;someValue
+     * Delete an entity identified by its type and unique attributes.  
+     * In addition to the typeName path parameter, attribute key-value pair(s) can be provided in the following format  attr:&lt;attrName&gt;&#x3D;&lt;attrValue&gt;  NOTE: The attrName and attrValue should be unique across entities, eg. qualifiedName  The REST request would look something like this  DELETE /v2/entity/uniqueAttribute/type/aType?attr:aTypeAttribute&#x3D;someValue
      */
     @Test
     public void deleteByUniqueAttributeTest() {
@@ -242,8 +216,6 @@ public class EntityRestApiTest {
     }
 
     /**
-     * Deletes a given classification from an existing entity represented by a guid.
-     *
      * Deletes a given classification from an existing entity represented by a guid.
      */
     @Test
@@ -257,8 +229,6 @@ public class EntityRestApiTest {
     }
 
     /**
-     * Deletes a given classification from an existing entity represented by a guid.
-     *
      * Deletes a given classification from an existing entity represented by a guid.
      *
      * This tests the overload of the method that uses a Map for query parameters instead of
@@ -276,8 +246,6 @@ public class EntityRestApiTest {
     }
     /**
      * Deletes a given classification from an entity identified by its type and unique attributes.
-     *
-     * Deletes a given classification from an entity identified by its type and unique attributes.
      */
     @Test
     public void deleteClassificationByUniqueAttributeTest() {
@@ -286,11 +254,6 @@ public class EntityRestApiTest {
         api.deleteClassificationByUniqueAttribute(classificationName, typeName);
     }
 
-    /**
-     * 
-     *
-     * 
-     */
     @Test
     public void getAuditEventsTest() {
         String guid = null;
@@ -303,10 +266,6 @@ public class EntityRestApiTest {
     }
 
     /**
-     * 
-     *
-     * 
-     *
      * This tests the overload of the method that uses a Map for query parameters instead of
      * listing them out individually.
      */
@@ -323,8 +282,6 @@ public class EntityRestApiTest {
     }
     /**
      * Bulk API to retrieve list of entities identified by its GUIDs.
-     *
-     * Bulk API to retrieve list of entities identified by its GUIDs.
      */
     @Test
     public void getByGuidsTest() {
@@ -337,8 +294,6 @@ public class EntityRestApiTest {
     }
 
     /**
-     * Bulk API to retrieve list of entities identified by its GUIDs.
-     *
      * Bulk API to retrieve list of entities identified by its GUIDs.
      *
      * This tests the overload of the method that uses a Map for query parameters instead of
@@ -357,21 +312,17 @@ public class EntityRestApiTest {
     /**
      * Fetch complete definition of an entity given its GUID.
      *
-     * Fetch complete definition of an entity given its GUID.
      */
     @Test
     public void getByIdTest() {
-        String guid = null;
-        Boolean ignoreRelationships = null;
-        Boolean minExtInfo = null;
-        // JsonAtlasEntityWithExtInfo response = api.getById(guid, ignoreRelationships, minExtInfo);
-
-        // TODO: test validations
+        String guid = "28799686-aae7-45f5-b3f7-cd43f71eba5a";
+        Boolean ignoreRelationships = false;
+        Boolean minExtInfo = false;
+        JsonAtlasEntityWithExtInfo response = api.getById(guid, ignoreRelationships, minExtInfo);
+        System.out.println(response.getEntity().getRelationshipAttributes());
     }
 
     /**
-     * Fetch complete definition of an entity given its GUID.
-     *
      * Fetch complete definition of an entity given its GUID.
      *
      * This tests the overload of the method that uses a Map for query parameters instead of
@@ -379,21 +330,20 @@ public class EntityRestApiTest {
      */
     @Test
     public void getByIdTestQueryMap() {
-        String guid = "6651d056-da45-41d6-bcc7-11819d6b55d4";
+        String guid = "8ee97417-4bec-477c-9252-051d93e54ddb";
         EntityRestApi.GetByIdQueryParams queryParams = new EntityRestApi.GetByIdQueryParams()
-            .ignoreRelationships(null)
-            .minExtInfo(null);
+            .ignoreRelationships(false)
+            .minExtInfo(false);
          JsonAtlasEntityWithExtInfo response = api.getById(guid, queryParams);
          System.out.println(response);
     }
     /**
-     * Fetch complete definition of an entity given its type and unique attribute.
-     *
-     * Fetch complete definition of an entity given its type and unique attribute.  In addition to the typeName path parameter, attribute key-value pair(s) can be provided in the following format  attr:&lt;attrName&gt;&#x3D;&lt;attrValue&gt;  NOTE: The attrName and attrValue should be unique across entities, eg. qualifiedName  The REST request would look something like this  GET /v2/entity/uniqueAttribute/type/aType?attr:aTypeAttribute&#x3D;someValue
+     * Fetch complete definition of an entity given its type and unique attribute.  
+     * In addition to the typeName path parameter, attribute key-value pair(s) can be provided in the following format  attr:&lt;attrName&gt;&#x3D;&lt;attrValue&gt;  NOTE: The attrName and attrValue should be unique across entities, eg. qualifiedName  The REST request would look something like this  GET /v2/entity/uniqueAttribute/type/aType?attr:aTypeAttribute&#x3D;someValue
      */
     @Test
     public void getByUniqueAttributesTest() {
-        String typeName = "LoadProcess";
+        String typeName = "BaseType";
         Boolean ignoreRelationships = true;
         Boolean minExtInfo = true;
         JsonAtlasEntityWithExtInfo response = api.getByUniqueAttributes(typeName, ignoreRelationships, minExtInfo);
@@ -401,25 +351,26 @@ public class EntityRestApiTest {
     }
 
     /**
-     * Fetch complete definition of an entity given its type and unique attribute.
-     *
-     * Fetch complete definition of an entity given its type and unique attribute.  In addition to the typeName path parameter, attribute key-value pair(s) can be provided in the following format  attr:&lt;attrName&gt;&#x3D;&lt;attrValue&gt;  NOTE: The attrName and attrValue should be unique across entities, eg. qualifiedName  The REST request would look something like this  GET /v2/entity/uniqueAttribute/type/aType?attr:aTypeAttribute&#x3D;someValue
+     * Fetch complete definition of an entity given its type and unique attribute.  
+     * In addition to the typeName path parameter, attribute key-value pair(s) can be provided in the following format  attr:&lt;attrName&gt;&#x3D;&lt;attrValue&gt;  NOTE: The attrName and attrValue should be unique across entities, eg. qualifiedName  The REST request would look something like this  GET /v2/entity/uniqueAttribute/type/aType?attr:aTypeAttribute&#x3D;someValue
      *
      * This tests the overload of the method that uses a Map for query parameters instead of
      * listing them out individually.
      */
     @Test
     public void getByUniqueAttributesTestQueryMap() {
-        String typeName = "View_v1";
+        String typeName = "BaseType";
         EntityRestApi.GetByUniqueAttributesQueryParams queryParams = new EntityRestApi.GetByUniqueAttributesQueryParams()
-            .ignoreRelationships(true)
-            .minExtInfo(true);
-         JsonAtlasEntityWithExtInfo response = api.getByUniqueAttributes(typeName, queryParams);
-         System.out.println(response);
+            .ignoreRelationships(false)
+            .minExtInfo(false);
+        queryParams.put("updateTime", "1615539299617");
+        queryParams.put("createTime", "1615539299617");
+        queryParams.put("createdBy", "admin");
+        queryParams.put("description", "基础类型");
+        JsonAtlasEntityWithExtInfo response = api.getByUniqueAttributes(typeName, queryParams);
+        System.out.println(response);
     }
     /**
-     * Gets the list of classifications for a given entity represented by a guid.
-     *
      * Gets the list of classifications for a given entity represented by a guid.
      */
     @Test
@@ -433,8 +384,6 @@ public class EntityRestApiTest {
 
     /**
      * Gets the list of classifications for a given entity represented by a guid.
-     *
-     * Gets the list of classifications for a given entity represented by a guid.
      */
     @Test
     public void getClassificationsTest() {
@@ -445,9 +394,9 @@ public class EntityRestApiTest {
     }
 
     /**
-     * Bulk API to retrieve list of entities identified by its unique attributes.
      *
-     * Bulk API to retrieve list of entities identified by its unique attributes.  In addition to the typeName path parameter, attribute key-value pair(s) can be provided in the following format  typeName&#x3D;&lt;typeName&gt;&amp;attr_1:&lt;attrName&gt;&#x3D;&lt;attrValue&gt;&amp;attr_2:&lt;attrName&gt;&#x3D;&lt;attrValue&gt;&amp;attr_3:&lt;attrName&gt;&#x3D;&lt;attrValue&gt;  NOTE: The attrName should be an unique attribute for the given entity-type  The REST request would look something like this  GET /v2/entity/bulk/uniqueAttribute/type/hive_db?attr_0:qualifiedName&#x3D;db1@cl1&amp;attr_2:qualifiedName&#x3D;db2@cl1
+     * Bulk API to retrieve list of entities identified by its unique attributes.  
+     * In addition to the typeName path parameter, attribute key-value pair(s) can be provided in the following format  typeName&#x3D;&lt;typeName&gt;&amp;attr_1:&lt;attrName&gt;&#x3D;&lt;attrValue&gt;&amp;attr_2:&lt;attrName&gt;&#x3D;&lt;attrValue&gt;&amp;attr_3:&lt;attrName&gt;&#x3D;&lt;attrValue&gt;  NOTE: The attrName should be an unique attribute for the given entity-type  The REST request would look something like this  GET /v2/entity/bulk/uniqueAttribute/type/hive_db?attr_0:qualifiedName&#x3D;db1@cl1&amp;attr_2:qualifiedName&#x3D;db2@cl1
      */
     @Test
     public void getEntitiesByUniqueAttributesTest() {
@@ -460,9 +409,8 @@ public class EntityRestApiTest {
     }
 
     /**
-     * Bulk API to retrieve list of entities identified by its unique attributes.
-     *
-     * Bulk API to retrieve list of entities identified by its unique attributes.  In addition to the typeName path parameter, attribute key-value pair(s) can be provided in the following format  typeName&#x3D;&lt;typeName&gt;&amp;attr_1:&lt;attrName&gt;&#x3D;&lt;attrValue&gt;&amp;attr_2:&lt;attrName&gt;&#x3D;&lt;attrValue&gt;&amp;attr_3:&lt;attrName&gt;&#x3D;&lt;attrValue&gt;  NOTE: The attrName should be an unique attribute for the given entity-type  The REST request would look something like this  GET /v2/entity/bulk/uniqueAttribute/type/hive_db?attr_0:qualifiedName&#x3D;db1@cl1&amp;attr_2:qualifiedName&#x3D;db2@cl1
+     * Bulk API to retrieve list of entities identified by its unique attributes.  
+     * In addition to the typeName path parameter, attribute key-value pair(s) can be provided in the following format  typeName&#x3D;&lt;typeName&gt;&amp;attr_1:&lt;attrName&gt;&#x3D;&lt;attrValue&gt;&amp;attr_2:&lt;attrName&gt;&#x3D;&lt;attrValue&gt;&amp;attr_3:&lt;attrName&gt;&#x3D;&lt;attrValue&gt;  NOTE: The attrName should be an unique attribute for the given entity-type  The REST request would look something like this  GET /v2/entity/bulk/uniqueAttribute/type/hive_db?attr_0:qualifiedName&#x3D;db1@cl1&amp;attr_2:qualifiedName&#x3D;db2@cl1
      *
      * This tests the overload of the method that uses a Map for query parameters instead of
      * listing them out individually.
@@ -478,9 +426,8 @@ public class EntityRestApiTest {
     // TODO: test validations
     }
     /**
-     * Fetch AtlasEntityHeader given its type and unique attribute.
-     *
-     * Fetch AtlasEntityHeader given its type and unique attribute.  In addition to the typeName path parameter, attribute key-value pair(s) can be provided in the following format  attr:&lt;attrName&gt;&#x3D;&lt;attrValue&gt;  NOTE: The attrName and attrValue should be unique across entities, eg. qualifiedName  The REST request would look something like this  GET /v2/entity/uniqueAttribute/type/aType/header?attr:aTypeAttribute&#x3D;someValue
+     * Fetch AtlasEntityHeader given its type and unique attribute.  
+     * In addition to the typeName path parameter, attribute key-value pair(s) can be provided in the following format  attr:&lt;attrName&gt;&#x3D;&lt;attrValue&gt;  NOTE: The attrName and attrValue should be unique across entities, eg. qualifiedName  The REST request would look something like this  GET /v2/entity/uniqueAttribute/type/aType/header?attr:aTypeAttribute&#x3D;someValue
      */
     @Test
     public void getEntityHeaderByUniqueAttributesTest() {
@@ -489,11 +436,6 @@ public class EntityRestApiTest {
          System.out.println(response);
     }
 
-    /**
-     * 
-     *
-     * 
-     */
     @Test
     public void getEntityHeadersTest() {
         Long tagUpdateStartTime = null;
@@ -503,10 +445,6 @@ public class EntityRestApiTest {
     }
 
     /**
-     * 
-     *
-     * 
-     *
      * This tests the overload of the method that uses a Map for query parameters instead of
      * listing them out individually.
      */
@@ -520,8 +458,6 @@ public class EntityRestApiTest {
     }
     /**
      * Get entity header given its GUID.
-     *
-     * Get entity header given its GUID.
      */
     @Test
     public void getHeaderByIdTest() {
@@ -534,7 +470,6 @@ public class EntityRestApiTest {
     /**
      * Upload the file for creating Business Metadata in BULK.
      *
-     * Upload the file for creating Business Metadata in BULK
      */
     @Test
     public void importBMAttributesTest() {
@@ -546,9 +481,8 @@ public class EntityRestApiTest {
     }
 
     /**
-     * Entity Partial Update - Add/Update entity attribute identified by its GUID.
-     *
-     * Entity Partial Update - Add/Update entity attribute identified by its GUID. Supports only uprimitive attribute type and entity references. does not support updation of complex types like arrays, maps Null updates are not possible
+     * Entity Partial Update - Add/Update entity attribute identified by its GUID. 
+     * Supports only uprimitive attribute type and entity references. does not support updation of complex types like arrays, maps Null updates are not possible
      */
     @Test
     public void partialUpdateEntityAttrByGuidTest() {
@@ -560,9 +494,8 @@ public class EntityRestApiTest {
     }
 
     /**
-     * Entity Partial Update - Add/Update entity attribute identified by its GUID.
-     *
-     * Entity Partial Update - Add/Update entity attribute identified by its GUID. Supports only uprimitive attribute type and entity references. does not support updation of complex types like arrays, maps Null updates are not possible
+     * Entity Partial Update - Add/Update entity attribute identified by its GUID. 
+     * Supports only uprimitive attribute type and entity references. does not support updation of complex types like arrays, maps Null updates are not possible
      *
      * This tests the overload of the method that uses a Map for query parameters instead of
      * listing them out individually.
@@ -577,13 +510,11 @@ public class EntityRestApiTest {
     // TODO: test validations
     }
     /**
-     * Entity Partial Update - Allows a subset of attributes to be updated on an entity which is identified by its type and unique attribute  eg: Referenceable.
-     *
      * Entity Partial Update - Allows a subset of attributes to be updated on an entity which is identified by its type and unique attribute  eg: Referenceable.qualifiedName. Null updates are not possible  In addition to the typeName path parameter, attribute key-value pair(s) can be provided in the following format  attr:&lt;attrName&gt;&#x3D;&lt;attrValue&gt;  NOTE: The attrName and attrValue should be unique across entities, eg. qualifiedName  The REST request would look something like this  PUT /v2/entity/uniqueAttribute/type/aType?attr:aTypeAttribute&#x3D;someValue
      */
     @Test
     public void partialUpdateEntityByUniqueAttrsTest() {
-        String typeName = null;
+        String typeName = "BaseType";
         JsonAtlasEntityWithExtInfo body = null;
         // JsonEntityMutationResponse response = api.partialUpdateEntityByUniqueAttrs(typeName, body);
 
@@ -591,8 +522,6 @@ public class EntityRestApiTest {
     }
 
     /**
-     * Get the sample Template for uploading/creating bulk BusinessMetaData.
-     *
      * Get the sample Template for uploading/creating bulk BusinessMetaData
      */
     @Test
@@ -602,11 +531,6 @@ public class EntityRestApiTest {
         // TODO: test validations
     }
 
-    /**
-     * 
-     *
-     * 
-     */
     @Test
     public void removeBusinessAttributesTest() {
         String guid = null;
@@ -615,11 +539,6 @@ public class EntityRestApiTest {
         // TODO: test validations
     }
 
-    /**
-     * 
-     *
-     * 
-     */
     @Test
     public void removeBusinessAttributes_0Test() {
         String bmName = null;
@@ -630,8 +549,6 @@ public class EntityRestApiTest {
     }
 
     /**
-     * delete given labels to a given entity.
-     *
      * delete given labels to a given entity
      */
     @Test
@@ -669,8 +586,6 @@ public class EntityRestApiTest {
     }
 
     /**
-     * Set labels to a given entity.
-     *
      * Set labels to a given entity
      */
     @Test
@@ -681,11 +596,6 @@ public class EntityRestApiTest {
         // TODO: test validations
     }
 
-    /**
-     * 
-     *
-     * 
-     */
     @Test
     public void setLabels_0Test() {
         String typeName = null;
@@ -696,8 +606,6 @@ public class EntityRestApiTest {
     }
 
     /**
-     * Updates classifications to an existing entity represented by a guid.
-     *
      * Updates classifications to an existing entity represented by a guid.
      */
     @Test
@@ -710,8 +618,6 @@ public class EntityRestApiTest {
     }
 
     /**
-     * Updates classification on an entity identified by its type and unique attributes.
-     *
      * Updates classification on an entity identified by its type and unique attributes.
      */
     @Test

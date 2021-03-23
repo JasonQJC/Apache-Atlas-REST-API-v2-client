@@ -40,6 +40,14 @@ public class JsonAtlasStructDef extends JsonAtlasBaseTypeDef {
     this.attributeDefs.add(attributeDefsItem);
     return this;
   }
+  
+  public JsonAtlasStructDef addAttributeDefsItem(List<JsonAtlasAttributeDef> attributeDefsItems) {
+    if (this.attributeDefs == null) {
+      this.attributeDefs = attributeDefsItems;
+    }
+    this.attributeDefs.addAll(attributeDefsItems);
+    return this;
+  }
 
    /**
    * Get attributeDefs

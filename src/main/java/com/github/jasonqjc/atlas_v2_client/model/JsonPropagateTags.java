@@ -16,37 +16,69 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- * PropagateTags indicates whether tags should propagate across the relationship instance. &lt;p&gt; Tags can propagate: &lt;p&gt; NONE - not at all &lt;br&gt; ONE_TO_TWO - from end 1 to 2 &lt;br&gt; TWO_TO_ONE - from end 2 to 1  &lt;br&gt; BOTH - both ways &lt;p&gt; Care needs to be taken when specifying. The use cases we are aware of where this flag is useful: &lt;p&gt; - propagating confidentiality classifications from a table to columns - ONE_TO_TWO could be used here &lt;br&gt; - propagating classifications around Glossary synonyms - BOTH could be used here. &lt;p&gt; There is an expectation that further enhancements will allow more granular control of tag propagation and will address how to resolve conflicts.
+ * PropagateTags indicates whether tags should propagate across the relationship
+ * instance.
+ * <p>
+ * Tags can propagate:
+ * <p>
+ * NONE - not at all <br>
+ * ONE_TO_TWO - from end 1 to 2 <br>
+ * TWO_TO_ONE - from end 2 to 1 <br>
+ * BOTH - both ways
+ * <p>
+ * Care needs to be taken when specifying. The use cases we are aware of where
+ * this flag is useful:
+ * <p>
+ * - propagating confidentiality classifications from a table to columns -
+ * ONE_TO_TWO could be used here <br>
+ * - propagating classifications around Glossary synonyms - BOTH could be used
+ * here.
+ * <p>
+ * There is an expectation that further enhancements will allow more granular
+ * control of tag propagation and will address how to resolve conflicts.
+ * 
+ * PropagateTags指示标签是否应在关系实例之间传播。
+ * 
+ * 标签可以传播：
+ * 
+ * None - 完全没有 
+ * ONE_TO_TWO - 从1到2 
+ * TWO_TO_ONE - 从2到1 
+ * BOTH - 双向
+ * 
+ * 在指定时需要注意。 我们知道这些标志在什么地方有用的用例：
+ * 
+ * -将机密性分类从表传播到列-ONE_TO_TWO可在此处使用 -关于词汇表同义词的传播分类-可以在此处使用BOTH。
+ * 
+ * 期望进一步的增强将允许对标签传播进行更精细的控制，并将解决如何解决冲突。
+ * 
  */
 public enum JsonPropagateTags {
-  NONE("NONE"),
-  ONE_TO_TWO("ONE_TO_TWO"),
-  TWO_TO_ONE("TWO_TO_ONE"),
-  BOTH("BOTH");
+	NONE("NONE"), ONE_TO_TWO("ONE_TO_TWO"), TWO_TO_ONE("TWO_TO_ONE"), BOTH("BOTH");
 
-  private String value;
+	private String value;
 
-  JsonPropagateTags(String value) {
-    this.value = value;
-  }
+	JsonPropagateTags(String value) {
+		this.value = value;
+	}
 
-  @JsonValue
-  public String getValue() {
-    return value;
-  }
+	@JsonValue
+	public String getValue() {
+		return value;
+	}
 
-  @Override
-  public String toString() {
-    return String.valueOf(value);
-  }
+	@Override
+	public String toString() {
+		return String.valueOf(value);
+	}
 
-  @JsonCreator
-  public static JsonPropagateTags fromValue(String text) {
-    for (JsonPropagateTags b : JsonPropagateTags.values()) {
-      if (String.valueOf(b.value).equals(text)) {
-        return b;
-      }
-    }
-    return null;
-  }
+	@JsonCreator
+	public static JsonPropagateTags fromValue(String text) {
+		for (JsonPropagateTags b : JsonPropagateTags.values()) {
+			if (String.valueOf(b.value).equals(text)) {
+				return b;
+			}
+		}
+		return null;
+	}
 }

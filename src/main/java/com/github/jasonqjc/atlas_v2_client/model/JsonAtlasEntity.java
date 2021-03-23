@@ -24,6 +24,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 /**
  * An instance of an entity - like hive_table, hive_database.
+ * 关于属性的说明可以在以下链接找到部分
+ * https://docs.cloudera.com/runtime/7.2.0/atlas-reference/topics/atlas-reference-attributes.html
+ * https://docs.cloudera.com/cdp-private-cloud-base/7.1.6/atlas-reference/topics/atlas-migration-system-metadata.html
  */
 @Schema(description = "An instance of an entity - like hive_table, hive_database.")
 
@@ -40,17 +43,31 @@ public class JsonAtlasEntity extends JsonAtlasStruct {
   @JsonProperty("createdBy")
   private String createdBy = null;
 
+  /**
+   * UI 界面上的User-defined properties 
+   */
   @JsonProperty("customAttributes")
   private Map<String, String> customAttributes = null;
 
   @JsonProperty("guid")
   private String guid = null;
 
+  /**
+   * Not used currently in Atlas. 
+   */
   @JsonProperty("homeId")
   private String homeId = null;
 
+  /**
+  * A system indicator that entities were created because they were referenced in
+  * the metadata collected by a service other than the source type associated
+  * with the entity type. An entity is typically marked "isIncomplete" when Atlas
+  * receives metadata out of order from when the events occurred. If IsIncomplete
+  * entities remain “incomplete” for a long time, it may indicate that the
+  * original messages for entity metadata have not arrived.
+  */
   @JsonProperty("isIncomplete")
-  private Boolean isIncomplete = null;
+  private Boolean isIncomplete = false;
 
   @JsonProperty("labels")
   private List<String> labels = null;
@@ -58,9 +75,15 @@ public class JsonAtlasEntity extends JsonAtlasStruct {
   @JsonProperty("meanings")
   private List<JsonAtlasTermAssignmentHeader> meanings = null;
 
+  /**
+   * Not used currently in Atlas. 
+   */
   @JsonProperty("provenanceType")
   private BigDecimal provenanceType = null;
 
+  /**
+   * Not used currently in Atlas. 
+   */
   @JsonProperty("proxy")
   private Boolean proxy = null;
 
@@ -68,14 +91,17 @@ public class JsonAtlasEntity extends JsonAtlasStruct {
   private Map<String, Object> relationshipAttributes = null;
 
   @JsonProperty("status")
-  private JsonStatus status = null;
+  private JsonStatus status = JsonStatus.ACTIVE;
 
   @JsonProperty("updateTime")
   private BigDecimal updateTime = null;
 
   @JsonProperty("updatedBy")
   private String updatedBy = null;
-
+  
+  /**
+   * Not used currently in Atlas. 
+   */
   @JsonProperty("version")
   private BigDecimal version = null;
 

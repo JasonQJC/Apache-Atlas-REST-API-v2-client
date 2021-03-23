@@ -1,44 +1,24 @@
 package com.github.jasonqjc.atlas_v2_client.api;
 
-import java.util.Collection;
 import java.util.List;
 
-import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
-import com.github.jasonqjc.atlas_v2_client.ApiClient;
-import com.github.jasonqjc.atlas_v2_client.api.DiscoveryRestApi;
-import com.github.jasonqjc.atlas_v2_client.api.UILoginApi;
 import com.github.jasonqjc.atlas_v2_client.model.JsonAtlasSearchResult;
 import com.github.jasonqjc.atlas_v2_client.model.JsonAtlasUserSavedSearch;
 import com.github.jasonqjc.atlas_v2_client.model.JsonQuickSearchParameters;
 import com.github.jasonqjc.atlas_v2_client.model.JsonSearchParameters;
 
-import feign.Response;
-
 /**
  * API tests for DiscoveryRestApi
  */
+@SpringBootTest
 public class DiscoveryRestApiTest {
 
+	@Autowired
     private DiscoveryRestApi api;
-
-    @Before
-    public void setup() {
-    	ApiClient loginClient = new ApiClient();
-    	loginClient.setBasePath("http://192.168.44.132:21000/");
-    	Response response = loginClient.buildClient(UILoginApi.class).login();
-    	Collection<String> collection = response.headers().get("Set-Cookie");
-    	String cookieString = collection.iterator().next();
-    	String string = cookieString.split(";")[0];
-    	
-        ApiClient apiClient = new ApiClient();
-        apiClient.getFeignBuilder().requestInterceptor(r -> {
-        	r.header("Cookie", string);
-        });
-		api = apiClient
-        		.buildClient(DiscoveryRestApi.class);
-    }
 
     /**
      * 
@@ -67,8 +47,6 @@ public class DiscoveryRestApiTest {
     }
 
     /**
-     * Attribute based search for entities satisfying the search parameters.
-     *
      * Attribute based search for entities satisfying the search parameters
      */
     @Test
@@ -80,8 +58,6 @@ public class DiscoveryRestApiTest {
     }
 
     /**
-     * Attribute based search for entities satisfying the search parameters.
-     *
      * Attribute based search for entities satisfying the search parameters
      */
     @Test
@@ -94,8 +70,6 @@ public class DiscoveryRestApiTest {
     }
 
     /**
-     * Attribute based search for entities satisfying the search parameters.
-     *
      * Attribute based search for entities satisfying the search parameters
      *
      * This tests the overload of the method that uses a Map for query parameters instead of
@@ -110,11 +84,7 @@ public class DiscoveryRestApiTest {
 
     // TODO: test validations
     }
-    /**
-     * 
-     *
-     * 
-     */
+    
     @Test
     public void getSavedSearchTest() {
         String name = null;
@@ -126,9 +96,6 @@ public class DiscoveryRestApiTest {
 
     /**
      * 
-     *
-     * 
-     *
      * This tests the overload of the method that uses a Map for query parameters instead of
      * listing them out individually.
      */
@@ -141,11 +108,8 @@ public class DiscoveryRestApiTest {
 
     // TODO: test validations
     }
-    /**
-     * 
-     *
-     * 
-     */
+    
+    
     @Test
     public void getSavedSearchesTest() {
         String user = null;
@@ -155,9 +119,6 @@ public class DiscoveryRestApiTest {
     }
 
     /**
-     * 
-     *
-     * 
      *
      * This tests the overload of the method that uses a Map for query parameters instead of
      * listing them out individually.
@@ -170,11 +131,7 @@ public class DiscoveryRestApiTest {
 
     // TODO: test validations
     }
-    /**
-     * 
-     *
-     * 
-     */
+    
     @Test
     public void getSuggestionsTest() {
         String fieldName = null;
@@ -185,9 +142,6 @@ public class DiscoveryRestApiTest {
     }
 
     /**
-     * 
-     *
-     * 
      *
      * This tests the overload of the method that uses a Map for query parameters instead of
      * listing them out individually.
@@ -202,7 +156,6 @@ public class DiscoveryRestApiTest {
     // TODO: test validations
     }
     /**
-     * Attribute based search for entities satisfying the search parameters.
      *
      * Attribute based search for entities satisfying the search parameters
      */
@@ -219,8 +172,6 @@ public class DiscoveryRestApiTest {
     }
 
     /**
-     * Attribute based search for entities satisfying the search parameters.
-     *
      * Attribute based search for entities satisfying the search parameters
      *
      * This tests the overload of the method that uses a Map for query parameters instead of
@@ -239,8 +190,6 @@ public class DiscoveryRestApiTest {
     // TODO: test validations
     }
     /**
-     * Attribute based search for entities satisfying the search parameters.
-     *
      * Attribute based search for entities satisfying the search parameters
      */
     @Test
@@ -252,8 +201,6 @@ public class DiscoveryRestApiTest {
     }
 
     /**
-     * Relationship search to search for related entities satisfying the search parameters.
-     *
      * Relationship search to search for related entities satisfying the search parameters
      */
     @Test
@@ -272,8 +219,6 @@ public class DiscoveryRestApiTest {
     }
 
     /**
-     * Relationship search to search for related entities satisfying the search parameters.
-     *
      * Relationship search to search for related entities satisfying the search parameters
      *
      * This tests the overload of the method that uses a Map for query parameters instead of
@@ -295,8 +240,6 @@ public class DiscoveryRestApiTest {
     // TODO: test validations
     }
     /**
-     * Retrieve data for the specified attribute search query.
-     *
      * Retrieve data for the specified attribute search query
      */
     @Test
@@ -312,8 +255,6 @@ public class DiscoveryRestApiTest {
     }
 
     /**
-     * Retrieve data for the specified attribute search query.
-     *
      * Retrieve data for the specified attribute search query
      *
      * This tests the overload of the method that uses a Map for query parameters instead of
@@ -332,8 +273,6 @@ public class DiscoveryRestApiTest {
     // TODO: test validations
     }
     /**
-     * Retrieve data for the specified fulltext query.
-     *
      * Retrieve data for the specified fulltext query
      */
     @Test
@@ -352,8 +291,6 @@ public class DiscoveryRestApiTest {
     }
 
     /**
-     * Retrieve data for the specified fulltext query.
-     *
      * Retrieve data for the specified fulltext query
      *
      * This tests the overload of the method that uses a Map for query parameters instead of
@@ -374,8 +311,6 @@ public class DiscoveryRestApiTest {
          System.out.println(response);
     }
     /**
-     * Retrieve data for the specified DSL.
-     *
      * Retrieve data for the specified DSL
      */
     @Test
@@ -391,8 +326,6 @@ public class DiscoveryRestApiTest {
     }
 
     /**
-     * Retrieve data for the specified DSL.
-     *
      * Retrieve data for the specified DSL
      *
      * This tests the overload of the method that uses a Map for query parameters instead of
@@ -411,8 +344,6 @@ public class DiscoveryRestApiTest {
     // TODO: test validations
     }
     /**
-     * Retrieve data for the specified fulltext query.
-     *
      * Retrieve data for the specified fulltext query
      */
     @Test
@@ -427,8 +358,6 @@ public class DiscoveryRestApiTest {
     }
 
     /**
-     * Retrieve data for the specified fulltext query.
-     *
      * Retrieve data for the specified fulltext query
      *
      * This tests the overload of the method that uses a Map for query parameters instead of
@@ -445,9 +374,8 @@ public class DiscoveryRestApiTest {
 
     // TODO: test validations
     }
+    
     /**
-     * Attribute based search for entities satisfying the search parameters.
-     *
      * Attribute based search for entities satisfying the search parameters
      */
     @Test
@@ -458,11 +386,6 @@ public class DiscoveryRestApiTest {
         // TODO: test validations
     }
 
-    /**
-     * 
-     *
-     * 
-     */
     @Test
     public void updateSavedSearchTest() {
         JsonAtlasUserSavedSearch body = null;

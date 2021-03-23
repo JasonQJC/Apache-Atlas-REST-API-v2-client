@@ -2,19 +2,12 @@ package com.github.jasonqjc.atlas_v2_client.api;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
 
-import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
-import com.github.jasonqjc.atlas_v2_client.ApiClient;
-import com.github.jasonqjc.atlas_v2_client.api.DiscoveryRestApi;
-import com.github.jasonqjc.atlas_v2_client.api.EntityRestApi;
-import com.github.jasonqjc.atlas_v2_client.api.RelationshipRestApi;
-import com.github.jasonqjc.atlas_v2_client.api.TypesRestApi;
-import com.github.jasonqjc.atlas_v2_client.api.UILoginApi;
 import com.github.jasonqjc.atlas_v2_client.model.JsonAtlasAttributeDef;
 import com.github.jasonqjc.atlas_v2_client.model.JsonAtlasEntityDef;
 import com.github.jasonqjc.atlas_v2_client.model.JsonAtlasRelationshipDef;
@@ -25,48 +18,26 @@ import com.github.jasonqjc.atlas_v2_client.model.JsonPropagateTags;
 import com.github.jasonqjc.atlas_v2_client.model.JsonRelationshipCategory;
 import com.github.jasonqjc.atlas_v2_client.model.JsonTypeCategory;
 
-import feign.Response;
-
+@SpringBootTest
 public class RequirementTestCase {
 
+	@Autowired
     private TypesRestApi typeRestApi;
+	@Autowired
     private EntityRestApi entityRestApi;
+	@Autowired
     private RelationshipRestApi relationshipRestApi;
+	@Autowired
     private DiscoveryRestApi discoveryRestApi;
 
-    @Before
-    public void setup() {
-    	ApiClient loginClient = new ApiClient();
-    	loginClient.setBasePath("http://192.168.44.132:21000/");
-    	Response response = loginClient.buildClient(UILoginApi.class).login();
-    	Collection<String> collection = response.headers().get("Set-Cookie");
-    	String cookieString = collection.iterator().next();
-    	String string = cookieString.split(";")[0];
-    	
-    	ApiClient apiClient = new ApiClient();
-    	apiClient.getFeignBuilder().requestInterceptor(r -> {
-        	r.header("Cookie", string);
-        });
-        typeRestApi = apiClient
-        		.buildClient(TypesRestApi.class);
-        entityRestApi = apiClient
-        		.buildClient(EntityRestApi.class);
-        relationshipRestApi = apiClient
-        		.buildClient(RelationshipRestApi.class);
-        discoveryRestApi = apiClient
-        		.buildClient(DiscoveryRestApi.class);
-    }
-    
-    
     @Test
     public void test() {
-//    	//创建类型(已创建
+    	//创建类型(已创建
     	JsonAtlasTypesDef createType = createType();
     	System.out.println(createType);
     	//创建关系类型(已创建
     	JsonAtlasTypesDef createRelationType = createRelationType();
     	System.out.println(createRelationType);
-    	
     }
 
 	private JsonAtlasTypesDef createRelationType() {
@@ -204,6 +175,7 @@ public class RequirementTestCase {
 		entityDef.description("基础类型");
 		entityDef.updateTime(nowUnixTime);
 		entityDef.updatedBy("qjc");
+		entityDef.addSubTypesItem("DataSet");
 		
 		entityDef.addAttributeDefsItem(new JsonAtlasAttributeDef().name("createTime").typeName("string").cardinality(JsonCardinality.SINGLE));
 		entityDef.addAttributeDefsItem(new JsonAtlasAttributeDef().name("createUser").typeName("string").cardinality(JsonCardinality.SINGLE));

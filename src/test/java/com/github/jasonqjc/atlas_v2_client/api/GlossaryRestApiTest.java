@@ -6,6 +6,8 @@ import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import com.github.jasonqjc.atlas_v2_client.ApiClient;
 import com.github.jasonqjc.atlas_v2_client.api.GlossaryRestApi;
@@ -17,19 +19,15 @@ import com.github.jasonqjc.atlas_v2_client.model.JsonAtlasRelatedObjectId;
 /**
  * API tests for GlossaryRestApi
  */
+@SpringBootTest
 public class GlossaryRestApiTest {
 
+	@Autowired
     private GlossaryRestApi api;
-
-    @Before
-    public void setup() {
-        api = new ApiClient().buildClient(GlossaryRestApi.class);
-    }
 
     /**
      * Assign the given term to the provided list of entity headers.
      *
-     * Assign the given term to the provided list of entity headers
      */
     @Test
     public void assignTermToEntitiesTest() {
@@ -43,7 +41,6 @@ public class GlossaryRestApiTest {
     /**
      * Create a glossary.
      *
-     * Create a glossary
      */
     @Test
     public void createGlossaryTest() {
@@ -56,7 +53,6 @@ public class GlossaryRestApiTest {
     /**
      * Create glossary category in bulk.
      *
-     * Create glossary category in bulk
      */
     @Test
     public void createGlossaryCategoriesTest() {
@@ -69,7 +65,6 @@ public class GlossaryRestApiTest {
     /**
      * Create glossary category.
      *
-     * Create glossary category
      */
     @Test
     public void createGlossaryCategoryTest() {
@@ -82,7 +77,6 @@ public class GlossaryRestApiTest {
     /**
      * Create a glossary term.
      *
-     * Create a glossary term
      */
     @Test
     public void createGlossaryTermTest() {
@@ -95,7 +89,6 @@ public class GlossaryRestApiTest {
     /**
      * Create glossary terms in bulk.
      *
-     * Create glossary terms in bulk
      */
     @Test
     public void createGlossaryTermsTest() {
@@ -108,7 +101,6 @@ public class GlossaryRestApiTest {
     /**
      * Delete a glossary.
      *
-     * Delete a glossary
      */
     @Test
     public void deleteGlossaryTest() {
@@ -121,7 +113,6 @@ public class GlossaryRestApiTest {
     /**
      * Delete a glossary category.
      *
-     * Delete a glossary category
      */
     @Test
     public void deleteGlossaryCategoryTest() {
@@ -134,7 +125,6 @@ public class GlossaryRestApiTest {
     /**
      * Delete a glossary term.
      *
-     * Delete a glossary term
      */
     @Test
     public void deleteGlossaryTermTest() {
@@ -147,7 +137,6 @@ public class GlossaryRestApiTest {
     /**
      * Remove the term assignment for the given list of entity headers.
      *
-     * Remove the term assignment for the given list of entity headers
      */
     @Test
     public void disassociateTermAssignmentFromEntitiesTest() {
@@ -161,7 +150,6 @@ public class GlossaryRestApiTest {
     /**
      * Get all terms associated with the specific category.
      *
-     * Get all terms associated with the specific category
      */
     @Test
     public void getCategoryTermsTest() {
@@ -176,8 +164,6 @@ public class GlossaryRestApiTest {
 
     /**
      * Get all terms associated with the specific category.
-     *
-     * Get all terms associated with the specific category
      *
      * This tests the overload of the method that uses a Map for query parameters instead of
      * listing them out individually.
@@ -196,7 +182,6 @@ public class GlossaryRestApiTest {
     /**
      * Get a specific Glossary.
      *
-     * Get a specific Glossary
      */
     @Test
     public void getDetailedGlossaryTest() {
@@ -209,7 +194,6 @@ public class GlossaryRestApiTest {
     /**
      * Get all entity headers assigned with the specified term.
      *
-     * Get all entity headers assigned with the specified term
      */
     @Test
     public void getEntitiesAssignedWithTermTest() {
@@ -224,8 +208,6 @@ public class GlossaryRestApiTest {
 
     /**
      * Get all entity headers assigned with the specified term.
-     *
-     * Get all entity headers assigned with the specified term
      *
      * This tests the overload of the method that uses a Map for query parameters instead of
      * listing them out individually.
@@ -244,7 +226,6 @@ public class GlossaryRestApiTest {
     /**
      * Retrieve all glossaries registered with Atlas.
      *
-     * Retrieve all glossaries registered with Atlas
      */
     @Test
     public void getGlossariesTest() {
@@ -258,8 +239,6 @@ public class GlossaryRestApiTest {
 
     /**
      * Retrieve all glossaries registered with Atlas.
-     *
-     * Retrieve all glossaries registered with Atlas
      *
      * This tests the overload of the method that uses a Map for query parameters instead of
      * listing them out individually.
@@ -277,7 +256,6 @@ public class GlossaryRestApiTest {
     /**
      * Get a specific Glossary.
      *
-     * Get a specific Glossary
      */
     @Test
     public void getGlossaryTest() {
@@ -290,7 +268,6 @@ public class GlossaryRestApiTest {
     /**
      * Get the categories belonging to a specific glossary.
      *
-     * Get the categories belonging to a specific glossary
      */
     @Test
     public void getGlossaryCategoriesTest() {
@@ -305,8 +282,6 @@ public class GlossaryRestApiTest {
 
     /**
      * Get the categories belonging to a specific glossary.
-     *
-     * Get the categories belonging to a specific glossary
      *
      * This tests the overload of the method that uses a Map for query parameters instead of
      * listing them out individually.
@@ -325,7 +300,6 @@ public class GlossaryRestApiTest {
     /**
      * Get the categories belonging to a specific glossary.
      *
-     * Get the categories belonging to a specific glossary
      */
     @Test
     public void getGlossaryCategoriesHeadersTest() {
@@ -340,8 +314,6 @@ public class GlossaryRestApiTest {
 
     /**
      * Get the categories belonging to a specific glossary.
-     *
-     * Get the categories belonging to a specific glossary
      *
      * This tests the overload of the method that uses a Map for query parameters instead of
      * listing them out individually.
@@ -360,7 +332,6 @@ public class GlossaryRestApiTest {
     /**
      * Get specific glossary category.
      *
-     * Get specific glossary category
      */
     @Test
     public void getGlossaryCategoryTest() {
@@ -372,8 +343,6 @@ public class GlossaryRestApiTest {
 
     /**
      * Get specific glossary term.
-     *
-     * Get specific glossary term
      */
     @Test
     public void getGlossaryTermTest() {
@@ -386,7 +355,6 @@ public class GlossaryRestApiTest {
     /**
      * Get term headers belonging to a specific glossary.
      *
-     * Get term headers belonging to a specific glossary
      */
     @Test
     public void getGlossaryTermHeadersTest() {
@@ -401,8 +369,6 @@ public class GlossaryRestApiTest {
 
     /**
      * Get term headers belonging to a specific glossary.
-     *
-     * Get term headers belonging to a specific glossary
      *
      * This tests the overload of the method that uses a Map for query parameters instead of
      * listing them out individually.
@@ -421,7 +387,6 @@ public class GlossaryRestApiTest {
     /**
      * Get terms belonging to a specific glossary.
      *
-     * Get terms belonging to a specific glossary
      */
     @Test
     public void getGlossaryTermsTest() {
@@ -436,8 +401,6 @@ public class GlossaryRestApiTest {
 
     /**
      * Get terms belonging to a specific glossary.
-     *
-     * Get terms belonging to a specific glossary
      *
      * This tests the overload of the method that uses a Map for query parameters instead of
      * listing them out individually.
@@ -456,7 +419,6 @@ public class GlossaryRestApiTest {
     /**
      * Get all related categories (parent and children).
      *
-     * Get all related categories (parent and children)
      */
     @Test
     public void getRelatedCategoriesTest() {
@@ -471,8 +433,6 @@ public class GlossaryRestApiTest {
 
     /**
      * Get all related categories (parent and children).
-     *
-     * Get all related categories (parent and children)
      *
      * This tests the overload of the method that uses a Map for query parameters instead of
      * listing them out individually.
@@ -491,7 +451,6 @@ public class GlossaryRestApiTest {
     /**
      * Get all related terms for a specific term.
      *
-     * Get all related terms for a specific term
      */
     @Test
     public void getRelatedTermsTest() {
@@ -506,8 +465,6 @@ public class GlossaryRestApiTest {
 
     /**
      * Get all related terms for a specific term.
-     *
-     * Get all related terms for a specific term
      *
      * This tests the overload of the method that uses a Map for query parameters instead of
      * listing them out individually.
@@ -526,7 +483,6 @@ public class GlossaryRestApiTest {
     /**
      * Upload glossary file for creating AtlasGlossaryTerms in bulk.
      *
-     * Upload glossary file for creating AtlasGlossaryTerms in bulk
      */
     @Test
     public void importGlossaryDataTest() {
@@ -540,7 +496,6 @@ public class GlossaryRestApiTest {
     /**
      * Partially update the glossary.
      *
-     * Partially update the glossary
      */
     @Test
     public void partialUpdateGlossaryTest() {
@@ -554,7 +509,6 @@ public class GlossaryRestApiTest {
     /**
      * Partially update the glossary category.
      *
-     * Partially update the glossary category
      */
     @Test
     public void partialUpdateGlossaryCategoryTest() {
@@ -568,7 +522,6 @@ public class GlossaryRestApiTest {
     /**
      * Partially update the glossary term.
      *
-     * Partially update the glossary term
      */
     @Test
     public void partialUpdateGlossaryTermTest() {
@@ -582,7 +535,6 @@ public class GlossaryRestApiTest {
     /**
      * Get sample template for uploading/creating bulk AtlasGlossaryTerm.
      *
-     * Get sample template for uploading/creating bulk AtlasGlossaryTerm
      */
     @Test
     public void produceTemplate2Test() {
@@ -594,7 +546,6 @@ public class GlossaryRestApiTest {
     /**
      * Remove the term assignment for the given list of entity headers.
      *
-     * Remove the term assignment for the given list of entity headers
      */
     @Test
     public void removeTermAssignmentFromEntitiesTest() {
@@ -608,7 +559,6 @@ public class GlossaryRestApiTest {
     /**
      * Update the given glossary.
      *
-     * Update the given glossary
      */
     @Test
     public void updateGlossaryTest() {
@@ -621,8 +571,6 @@ public class GlossaryRestApiTest {
 
     /**
      * Update the given glossary category.
-     *
-     * Update the given glossary category
      */
     @Test
     public void updateGlossaryCategoryTest() {
@@ -635,8 +583,6 @@ public class GlossaryRestApiTest {
 
     /**
      * Update the given glossary term.
-     *
-     * Update the given glossary term
      */
     @Test
     public void updateGlossaryTermTest() {

@@ -56,6 +56,9 @@ public class JsonAtlasRelationship extends JsonAtlasStruct {
   @JsonProperty("propagateTags")
   private JsonPropagateTags propagateTags = null;
 
+  /**
+   * 传播分类
+   */
   @JsonProperty("propagatedClassifications")
   private List<JsonAtlasClassification> propagatedClassifications = null;
 
