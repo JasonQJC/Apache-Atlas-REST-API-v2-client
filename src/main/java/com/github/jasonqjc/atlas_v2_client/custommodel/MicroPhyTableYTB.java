@@ -7,9 +7,6 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class MicroTaskTable extends VBaseType {
-	private String isInputOrOutput;
-	private String tableName;
-	private String tableCode;
-	private String tabledescribe;
+public class MicroPhyTableYTB extends VBaseType {
+
 }

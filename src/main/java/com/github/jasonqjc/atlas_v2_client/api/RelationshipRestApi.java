@@ -17,7 +17,6 @@ public interface RelationshipRestApi extends ApiClient.Api {
 
   /**
    * Create a new relationship between entities.
-   * Create a new relationship between entities.
    * @param body  (optional)
    * @return JsonAtlasRelationship
    */
@@ -29,7 +28,6 @@ public interface RelationshipRestApi extends ApiClient.Api {
   JsonAtlasRelationship create(JsonAtlasRelationship body);
   /**
    * Delete a relationship between entities using guid.
-   * Delete a relationship between entities using guid.
    * @param guid  (required)
    */
   @RequestLine("DELETE /v2/relationship/guid/{guid}")
@@ -39,7 +37,6 @@ public interface RelationshipRestApi extends ApiClient.Api {
   })
   void deleteById(@Param("guid") String guid);
   /**
-   * Get relationship information between entities using guid.
    * Get relationship information between entities using guid.
    * @param guid  (required)
    * @param extendedInfo  (optional, default to false)
@@ -52,7 +49,6 @@ public interface RelationshipRestApi extends ApiClient.Api {
   JsonAtlasRelationshipWithExtInfo getById2(@Param("guid") String guid, @Param("extendedInfo") Boolean extendedInfo);
 
   /**
-   * Get relationship information between entities using guid.
    * Get relationship information between entities using guid.
    * Note, this is equivalent to the other <code>getById2</code> method,
    * but with the query parameters collected into a single Map parameter. This
@@ -86,7 +82,6 @@ public interface RelationshipRestApi extends ApiClient.Api {
     }
   }
   /**
-   * Update an existing relationship between entities.
    * Update an existing relationship between entities.
    * @param body  (optional)
    * @return JsonAtlasRelationship

@@ -24,7 +24,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * Atlas relationship instance.
  */
 @Schema(description = "Atlas relationship instance.")
-
 public class JsonAtlasRelationship extends JsonAtlasStruct {
   @JsonProperty("blockedPropagatedClassifications")
   private List<JsonAtlasClassification> blockedPropagatedClassifications = null;

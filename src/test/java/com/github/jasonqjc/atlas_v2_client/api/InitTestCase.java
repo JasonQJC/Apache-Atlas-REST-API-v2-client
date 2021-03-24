@@ -9,16 +9,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
-import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.github.jasonqjc.atlas_v2_client.common.RelationNameGenStrategy;
 import com.github.jasonqjc.atlas_v2_client.controller.ApiController.EntityUpdateDTO;
 import com.github.jasonqjc.atlas_v2_client.model.JsonAtlasAttributeDef;
 import com.github.jasonqjc.atlas_v2_client.model.JsonAtlasEntityDef;
@@ -55,12 +54,13 @@ public class InitTestCase {
     public void test() throws ClassNotFoundException {
 //    	JsonAtlasTypesDef createBaseType = createBaseType();
 //    	System.out.println(createBaseType);
-//    	JsonAtlasTypesDef createSubType = createSubType();
-//    	System.out.println(createSubType);
+    	JsonAtlasTypesDef createSubType = createSubType();
+    	System.out.println(createSubType);
 //    	JsonAtlasTypesDef createRelationType = createRelationType();
 //    	System.out.println(createRelationType);
 //    	generateSomeEntity();
-    	generateRelation();
+    	JsonAtlasTypesDef generateRelation = generateRelation();
+    	System.out.println(generateRelation);
     }
     
     private JsonAtlasTypesDef generateRelation() {
@@ -68,14 +68,14 @@ public class InitTestCase {
         BigDecimal nowUnixTime = BigDecimal.valueOf(new Date().getTime());
         JsonAtlasTypesDef body = new JsonAtlasTypesDef();
         joinedRelationStrings.forEach(relationString -> {
-        	String[] split = relationString.split(JOIN_STR);
+        	String[] split = relationString.split(RelationNameGenStrategy.JOIN_STR);
         	String relationEnd1 = split[0];
-        	String relationEnd2 = split[0];
+        	String relationEnd2 = split[1];
         	JsonAtlasRelationshipDef relationshipDef = new JsonAtlasRelationshipDef();
         	body.addRelationshipDefsItem(relationshipDef);
-        	relationshipDef.name(JOIN_STR).category(JsonTypeCategory.RELATIONSHIP)
+        	relationshipDef.name(relationString).category(JsonTypeCategory.RELATIONSHIP)
     		.createTime(nowUnixTime).createdBy("vicson")
-    		.description(JOIN_STR).updateTime(nowUnixTime).updatedBy("vicson");
+    		.description(relationString).updateTime(nowUnixTime).updatedBy("vicson");
     		relationshipDef.relationshipCategory(JsonRelationshipCategory.ASSOCIATION);
     		relationshipDef.propagateTags(JsonPropagateTags.BOTH);
     		relationshipDef.endDef1(new JsonAtlasRelationshipEndDef()
@@ -114,7 +114,7 @@ public class InitTestCase {
 		set.add(getComparedJoinedString("Item","MicroTask"));
 		set.add(getComparedJoinedString("Item","MacroRpt"));
 		set.add(getComparedJoinedString("Item","Publish"));
-		set.add(getComparedJoinedString("Item","BiItemTable"));
+//		set.add(getComparedJoinedString("Item","BiItemTable"));
 		set.add(getComparedJoinedString("Item","Article"));
 		set.add(getComparedJoinedString("Publish","Item"));
 		set.add(getComparedJoinedString("Publish","Publish"));
@@ -128,7 +128,7 @@ public class InitTestCase {
 		set.add(getComparedJoinedString("MacroRpt","MacroRptTemplate"));
 		set.add(getComparedJoinedString("MacroRptTemplate","MacroRpt"));
 		set.add(getComparedJoinedString("MacroRptTemplate","MacroRptTemplateCell"));
-		set.add(getComparedJoinedString("MacroRptTemplate","MacroRptObj"));
+		set.add(getComparedJoinedString("MacroRptTemplate","MacroRptTemplateObj"));
 		set.add(getComparedJoinedString("MacroRptTemplateCell","MacroRptTemplate"));
 		set.add(getComparedJoinedString("MacroRptTemplateObj","MacroRptTemplate"));
 		set.add(getComparedJoinedString("MacroRptTemplateObjCell","MacroRptTemplateObj"));
@@ -137,13 +137,8 @@ public class InitTestCase {
 		return set;
 	}
 
-	static final String JOIN_STR = "_";
 	private String getComparedJoinedString(String string, String string2) {
-		if(string.compareTo(string2) <= 0) {
-			return string + JOIN_STR + string2;
-		} else {
-			return string2 + JOIN_STR + string;
-		}
+		return RelationNameGenStrategy.gen(string, string2);
 	}
 
 	private void generateSomeEntity() throws ClassNotFoundException {
@@ -273,57 +268,65 @@ public class InitTestCase {
 		BigDecimal nowUnixTime = BigDecimal.valueOf(new Date().getTime());
 		JsonAtlasTypesDef body = new JsonAtlasTypesDef();
 		
-		body.addEntityDefsItem(
-				typeDefBaseType("MicroOriginalTable","微观原始表","VBaseType",nowUnixTime,
-						createSimpleAttributeDefs("tableName","tableCode","tableDescribe","year","htmlBy","sourceType","dataSource")));
-		body.addEntityDefsItem(
-				typeDefBaseType("MicroPhyTable","微观物理表","VBaseType",nowUnixTime,
-						createSimpleAttributeDefs("tableName","version","type","tableDescribe")));
-		body.addEntityDefsItem(
-				typeDefBaseType("MicroBaseTable","微观聚合表、主题表、目录表","VBaseType",nowUnixTime,
-						createSimpleAttributeDefs("tableName","tableCode","tableDescribe","tableType","loadTaskPath")));
-		body.addEntityDefsItem(
-				typeDefBaseType("MicroProcess","微观处理过程","VBaseType",nowUnixTime,
-						createSimpleAttributeDefs("processPath","processType")));
-		body.addEntityDefsItem(
-				typeDefBaseType("MicroTask","微观任务","VBaseType",nowUnixTime,
-						createSimpleAttributeDefs("taskName","taskCode","taskCycle","IPO")));
-		body.addEntityDefsItem(
-				typeDefBaseType("MicroTaskTable","微观任务表","VBaseType",nowUnixTime,
-						createSimpleAttributeDefs("isInputOrOutput","tableName","tableCode","tabledescribe")));
-		body.addEntityDefsItem(
-				typeDefBaseType("MicroColumn","微观表列","VBaseColumn",nowUnixTime,
-						createSimpleAttributeDefs("colCName","colEName","colDataType","sort","colComments")));
-		body.addEntityDefsItem(
-				typeDefBaseType("Item","数据资产主题","VBaseType",nowUnixTime,
-						createSimpleAttributeDefs("itemName","type","isTopItem")));
-		body.addEntityDefsItem(
-				typeDefBaseType("Publish","发布模板","VBaseType",nowUnixTime,
-						createSimpleAttributeDefs("articleName","articleCode","bgqType","articlePath")));
-		body.addEntityDefsItem(
-				typeDefBaseType("PublishObj","发布实例","VBaseType",nowUnixTime,
-						createSimpleAttributeDefs("articleName","articleCode","bgq","articleObjPath")));
-		body.addEntityDefsItem(
-				typeDefBaseType("ArticleObj","文章实例","VBaseType",nowUnixTime,
-						createSimpleAttributeDefs("artName","artCode","bgq","content")));
-		body.addEntityDefsItem(
-				typeDefBaseType("MacroRpt","宏观报表","VBaseType",nowUnixTime,
-						createSimpleAttributeDefs("bgqType","rptName","rptCode")));
-		body.addEntityDefsItem(
-				typeDefBaseType("MacroRptTemplate","宏观报表模板","VBaseType",nowUnixTime,
-						createSimpleAttributeDefs("startTime","endTime","templateName","templateDescribe")));
-		body.addEntityDefsItem(
-				typeDefBaseType("MacroRptTemplateCell","宏观报表模板单元格","VBaseType",nowUnixTime,
-						createSimpleAttributeDefs("x","y","bgqType")));
-		body.addEntityDefsItem(
-				typeDefBaseType("MacroRptTemplateObj","宏报模板实例","VBaseType",nowUnixTime,
-						createSimpleAttributeDefs("bgq")));
-		body.addEntityDefsItem(
-				typeDefBaseType("MacroRptTemplateObjCell","宏观报表模板实例单元格","VBaseType",nowUnixTime,
-						createSimpleAttributeDefs("x","y")));
-		body.addEntityDefsItem(
-				typeDefBaseType("MacroData","宏观数据","VBaseType",nowUnixTime,
-						createSimpleAttributeDefs("value","time")));
+//		body.addEntityDefsItem(
+//				typeDefBaseType("MicroOriginalTable","微观原始表","VBaseType",nowUnixTime,
+//						createSimpleAttributeDefs("tableName","tableCode","tableDescribe","year","htmlBy","sourceType","dataSource")));
+//		body.addEntityDefsItem(
+//				typeDefBaseType("MicroPhyTable","微观物理表","VBaseType",nowUnixTime,
+//						createSimpleAttributeDefs("tableName","version","type","tableDescribe")));
+//		body.addEntityDefsItem(
+//				typeDefBaseType("MicroBaseTable","微观聚合表、主题表、目录表","VBaseType",nowUnixTime,
+//						createSimpleAttributeDefs("tableName","tableCode","tableDescribe","tableType","loadTaskPath")));
+//		body.addEntityDefsItem(
+//				typeDefBaseType("MicroProcess","微观处理过程","VBaseType",nowUnixTime,
+//						createSimpleAttributeDefs("processPath","processType")));
+//		body.addEntityDefsItem(
+//				typeDefBaseType("MicroTask","微观任务","VBaseType",nowUnixTime,
+//						createSimpleAttributeDefs("taskName","taskCode","taskCycle","IPO")));
+//		body.addEntityDefsItem(
+//				typeDefBaseType("MicroTaskTable","微观任务表","VBaseType",nowUnixTime,
+//						createSimpleAttributeDefs("isInputOrOutput","tableName","tableCode","tabledescribe")));
+//		body.addEntityDefsItem(
+//				typeDefBaseType("MicroColumn","微观表列","VBaseType",nowUnixTime,
+//						createSimpleAttributeDefs("colCName","colEName","colDataType","sort","colComments")));
+//		body.addEntityDefsItem(
+//				typeDefBaseType("Item","数据资产主题","VBaseType",nowUnixTime,
+//						createSimpleAttributeDefs("itemName","type","isTopItem")));
+//		body.addEntityDefsItem(
+//				typeDefBaseType("Publish","发布模板","VBaseType",nowUnixTime,
+//						createSimpleAttributeDefs("articleName","articleCode","bgqType","articlePath")));
+//		body.addEntityDefsItem(
+//				typeDefBaseType("PublishObj","发布实例","VBaseType",nowUnixTime,
+//						createSimpleAttributeDefs("articleName","articleCode","bgq","articleObjPath")));
+//		body.addEntityDefsItem(
+//				typeDefBaseType("Article","文章","VBaseType",nowUnixTime,
+//						createSimpleAttributeDefs("artName","artCode","bgqType")));
+//		body.addEntityDefsItem(
+//				typeDefBaseType("ArticleObj","文章实例","VBaseType",nowUnixTime,
+//						createSimpleAttributeDefs("artName","artCode","bgqType","content","plugPath")));
+//		body.addEntityDefsItem(
+//				typeDefBaseType("MacroRpt","宏观报表","VBaseType",nowUnixTime,
+//						createSimpleAttributeDefs("bgqType","rptName","rptCode")));
+//		body.addEntityDefsItem(
+//				typeDefBaseType("MacroRptTemplate","宏观报表模板","VBaseType",nowUnixTime,
+//						createSimpleAttributeDefs("startTime","endTime","templateName","templateDescribe")));
+//		body.addEntityDefsItem(
+//				typeDefBaseType("MacroRptTemplateCell","宏观报表模板单元格","VBaseType",nowUnixTime,
+//						createSimpleAttributeDefs("x","y","bgqType")));
+//		body.addEntityDefsItem(
+//				typeDefBaseType("MacroRptTemplateObj","宏报模板实例","VBaseType",nowUnixTime,
+//						createSimpleAttributeDefs("bgq")));
+//		body.addEntityDefsItem(
+//				typeDefBaseType("MacroRptTemplateObjCell","宏观报表模板实例单元格","VBaseType",nowUnixTime,
+//						createSimpleAttributeDefs("x","y")));
+//		body.addEntityDefsItem(
+//				typeDefBaseType("MacroData","宏观数据","VBaseType",nowUnixTime,
+//						createSimpleAttributeDefs("value","time")));
+		
+//		body.addEntityDefsItem(
+//				typeDefBaseType("MicroPhyTableYTB","微观物理表采集配置","VBaseType",nowUnixTime));
+//		body.addEntityDefsItem(
+//				typeDefBaseType("MicroPhyTableLog","微观物理表采集日志","VBaseType",nowUnixTime));
 		return typeRestApi.createAtlasTypeDefs(body);
 	}
 

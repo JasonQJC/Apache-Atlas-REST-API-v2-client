@@ -14,16 +14,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.github.jasonqjc.atlas_v2_client.api.EntityRestApi;
+import com.github.jasonqjc.atlas_v2_client.api.RelationshipRestApi;
 import com.github.jasonqjc.atlas_v2_client.api.TypesRestApi;
+import com.github.jasonqjc.atlas_v2_client.common.RelationNameGenStrategy;
 import com.github.jasonqjc.atlas_v2_client.controller.ApiController.EntityUpdateDTO;
+import com.github.jasonqjc.atlas_v2_client.controller.ApiController.RelationCreateDTO;
 import com.github.jasonqjc.atlas_v2_client.model.JsonAtlasAttributeDef;
 import com.github.jasonqjc.atlas_v2_client.model.JsonAtlasEntity;
 import com.github.jasonqjc.atlas_v2_client.model.JsonAtlasEntityDef;
 import com.github.jasonqjc.atlas_v2_client.model.JsonAtlasEntityWithExtInfo;
+import com.github.jasonqjc.atlas_v2_client.model.JsonAtlasObjectId;
+import com.github.jasonqjc.atlas_v2_client.model.JsonAtlasRelationship;
 import com.github.jasonqjc.atlas_v2_client.model.JsonAtlasStruct;
 import com.github.jasonqjc.atlas_v2_client.model.JsonAtlasTypesDef;
 import com.github.jasonqjc.atlas_v2_client.model.JsonCardinality;
 import com.github.jasonqjc.atlas_v2_client.model.JsonEntityMutationResponse;
+import com.github.jasonqjc.atlas_v2_client.model.JsonPropagateTags;
+import com.github.jasonqjc.atlas_v2_client.model.JsonStatusAtlasRelationship;
 import com.github.jasonqjc.atlas_v2_client.model.JsonTypeCategory;
 import com.github.jasonqjc.atlas_v2_client.pojo.CreateTypePojo;
 
@@ -34,6 +41,8 @@ public class ApiService {
 	private TypesRestApi typeRestApi;
 	@Autowired
 	private EntityRestApi entityRestApi;
+	@Autowired
+    private RelationshipRestApi relationshipRestApi;
 	
 	public JsonAtlasTypesDef createEntityType(CreateTypePojo params) {
 		BigDecimal nowUnixTime = BigDecimal.valueOf(new Date().getTime());
@@ -105,6 +114,39 @@ public class ApiService {
 			}
 		}
 		return result;
+	}
+
+	public void createRelation(RelationCreateDTO relationCreateDTO) {
+		boolean anyBlank = StringUtils.isAnyBlank(relationCreateDTO.getEnd1().getGuid(),
+				relationCreateDTO.getEnd1().getTypeName(),
+				relationCreateDTO.getEnd2().getGuid(),
+				relationCreateDTO.getEnd2().getTypeName());
+		if(anyBlank) {
+			return;
+		}
+		String typeName = RelationNameGenStrategy.gen(relationCreateDTO.getEnd1().getTypeName(), relationCreateDTO.getEnd2().getTypeName());
+		JsonAtlasObjectId end1 = null;
+		JsonAtlasObjectId end2 = null;
+		if(typeName.startsWith(relationCreateDTO.getEnd1().getTypeName())) {
+			end1 = relationCreateDTO.getEnd1();
+			end2 = relationCreateDTO.getEnd2();
+		} else {
+			end1 = relationCreateDTO.getEnd2();
+			end2 = relationCreateDTO.getEnd1();
+		}
+		JsonAtlasRelationship body = new JsonAtlasRelationship();
+    	BigDecimal nowUnixTime = BigDecimal.valueOf(new Date().getTime());
+		body.createTime(nowUnixTime);
+        body.updateTime(nowUnixTime);
+        body.setCreatedBy("vicson");
+        body.setUpdatedBy("vicson");
+        body.status(JsonStatusAtlasRelationship.ACTIVE);
+        body.propagateTags(relationCreateDTO.getPropagateTags());
+		body.end1(end1);
+		body.end2(end2);
+		body.typeName(typeName);
+    	JsonAtlasRelationship response = relationshipRestApi.create(body);
+    	System.out.println(response);
 	}
 	
 }
