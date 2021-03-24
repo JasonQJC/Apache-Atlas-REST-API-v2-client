@@ -17,8 +17,9 @@ import com.github.jasonqjc.atlas_v2_client.api.EntityRestApi;
 import com.github.jasonqjc.atlas_v2_client.api.RelationshipRestApi;
 import com.github.jasonqjc.atlas_v2_client.api.TypesRestApi;
 import com.github.jasonqjc.atlas_v2_client.common.RelationNameGenStrategy;
-import com.github.jasonqjc.atlas_v2_client.controller.ApiController.EntityUpdateDTO;
-import com.github.jasonqjc.atlas_v2_client.controller.ApiController.RelationCreateDTO;
+import com.github.jasonqjc.atlas_v2_client.controller.dto.CreateTypePojo;
+import com.github.jasonqjc.atlas_v2_client.controller.dto.EntityUpdateDTO;
+import com.github.jasonqjc.atlas_v2_client.controller.dto.RelationCreateDTO;
 import com.github.jasonqjc.atlas_v2_client.model.JsonAtlasAttributeDef;
 import com.github.jasonqjc.atlas_v2_client.model.JsonAtlasEntity;
 import com.github.jasonqjc.atlas_v2_client.model.JsonAtlasEntityDef;
@@ -29,10 +30,8 @@ import com.github.jasonqjc.atlas_v2_client.model.JsonAtlasStruct;
 import com.github.jasonqjc.atlas_v2_client.model.JsonAtlasTypesDef;
 import com.github.jasonqjc.atlas_v2_client.model.JsonCardinality;
 import com.github.jasonqjc.atlas_v2_client.model.JsonEntityMutationResponse;
-import com.github.jasonqjc.atlas_v2_client.model.JsonPropagateTags;
 import com.github.jasonqjc.atlas_v2_client.model.JsonStatusAtlasRelationship;
 import com.github.jasonqjc.atlas_v2_client.model.JsonTypeCategory;
-import com.github.jasonqjc.atlas_v2_client.pojo.CreateTypePojo;
 
 @Component
 public class ApiService {

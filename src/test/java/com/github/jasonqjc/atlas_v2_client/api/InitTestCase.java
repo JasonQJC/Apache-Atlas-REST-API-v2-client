@@ -18,7 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.github.jasonqjc.atlas_v2_client.common.RelationNameGenStrategy;
-import com.github.jasonqjc.atlas_v2_client.controller.ApiController.EntityUpdateDTO;
+import com.github.jasonqjc.atlas_v2_client.controller.dto.EntityUpdateDTO;
 import com.github.jasonqjc.atlas_v2_client.model.JsonAtlasAttributeDef;
 import com.github.jasonqjc.atlas_v2_client.model.JsonAtlasEntityDef;
 import com.github.jasonqjc.atlas_v2_client.model.JsonAtlasObjectId;
