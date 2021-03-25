@@ -11,6 +11,6 @@ public class MicroBaseTable extends VBaseType {
 	private String tableName;
 	private String tableCode;
 	private String tableDescribe;
-	private String tableType;
 	private String loadTaskPath;
+	private String tableType;
 }

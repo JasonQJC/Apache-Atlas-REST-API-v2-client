@@ -12,4 +12,6 @@ public class MicroTask extends VBaseType {
 	private String taskCode;
 	private String taskCycle;
 	private String IPO;
+	private String fieldList;
+	private String operationList;
 }

@@ -10,7 +10,7 @@ import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 @Data
-@ApiModel
+@ApiModel(description = "创建类型用DTO")
 public class CreateTypePojo {
 	
 	@NotBlank

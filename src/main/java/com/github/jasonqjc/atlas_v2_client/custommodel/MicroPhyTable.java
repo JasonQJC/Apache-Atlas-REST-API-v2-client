@@ -9,6 +9,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class MicroPhyTable extends VBaseType {
 	private String tableName;
+	private String tableCode;
 	private String version;
 	private String type;
 	private String tableDescribe;

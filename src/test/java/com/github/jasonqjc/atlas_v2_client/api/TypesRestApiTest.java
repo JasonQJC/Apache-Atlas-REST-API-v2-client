@@ -211,7 +211,7 @@ public class TypesRestApiTest {
      */
     @Test
     public void getRelationshipDefByGuidTest() {
-        String guid = "02f83994-8c48-43fa-9c6d-3c887468f613";
+        String guid = "e4957536-086c-4437-ab74-973a0f4d9eb5";
         JsonAtlasRelationshipDef response = api.getRelationshipDefByGuid(guid);
         System.out.println(response);
     }
@@ -261,7 +261,7 @@ public class TypesRestApiTest {
      */
     @Test
     public void getTypeDefByNameTest() {
-        String name = "Table_Columns";
+        String name = "Item_Item";
         JsonAtlasBaseTypeDef response = api.getTypeDefByName(name);
         System.out.println(response);
     }

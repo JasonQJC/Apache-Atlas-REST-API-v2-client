@@ -46,8 +46,8 @@ public class RelationshipRestApiTest {
      */
     @Test
     public void getById2Test() {
-        String guid = "8ee97417-4bec-477c-9252-051d93e54ddb";
-        Boolean extendedInfo = null;
+        String guid = "e4957536-086c-4437-ab74-973a0f4d9eb5";
+        Boolean extendedInfo = false;
         JsonAtlasRelationshipWithExtInfo response = api.getById2(guid, extendedInfo);
         System.out.println(response);
     }

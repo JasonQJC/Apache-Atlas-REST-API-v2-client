@@ -160,7 +160,7 @@ public class EntityRestApiTest {
     @Test
     public void deleteByGuidsTest() {
         List<String> guid = new ArrayList<String>();
-        guid.add("13c89a6e-f2cb-4033-a9b7-832a39658d96");
+        guid.add("fbdc28ba-511d-410a-8f2b-1bb98f070090");
         JsonEntityMutationResponse response = api.deleteByGuids(guid);
         System.out.println(response);
     }

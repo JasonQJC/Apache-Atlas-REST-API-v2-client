@@ -5,10 +5,17 @@ import java.util.Map;
 import javax.validation.constraints.NotBlank;
 
 import io.swagger.annotations.ApiModel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-@ApiModel
+@ApiModel(description = "创建/更新实体使用的DTO")
+@Builder
+@NoArgsConstructor
+//@RequiredArgsConstructor
+@AllArgsConstructor
 public class EntityUpdateDTO {
 	private String guid;
 	@NotBlank

@@ -7,9 +7,10 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class Publish extends VBaseType {
-	private String articleName;
-	private String articleCode;
+public class PubTemplate extends VBaseType {
+	private String pubTemplateName;
+	private String pubTemplateCode;
 	private String bgqType;
-	private String articlePath;
+	private String pubTemplatePath;
+	private String pubTemplateType;
 }

@@ -9,7 +9,7 @@ import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 @Data
-@ApiModel
+@ApiModel(description = "创建实体关系用DTO")
 public class RelationCreateDTO {
 	@NotNull
 	private JsonAtlasObjectId end1;
